@@ -1,5 +1,11 @@
 #include "space_1.h"
 
+bool space1_thrusters = false;
+bool space1_platforms = false;
+bool space1_goo = false;
+bool space1_ufo = false;
+bool space1_missile = false;
+bool space1_aliens = false;
 
 void GaribInitSpace1()
 {
@@ -423,10 +429,12 @@ void CheckpointSpace1(u32 ptr, u16 item_id)
             //Checkpoint 1
             case 0x3A:
                 ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[0].ptr = ptr;
+                ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[0].warp_ptr = gvr_starting_checkpoint;
                 return;
             //Checkpoint 2
             case 0x69:
                 ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[1].ptr = ptr;
+                ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[1].warp_ptr = 0x8030A180;
                 return;
             default:
                 return;
@@ -440,425 +448,321 @@ void MonitorCheckpointSpace1()
     {
         for(int i = 0; i < 2; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
 }
 
+void RandomizeCheckpointSpace1()
+{
+    if(gvr_current_map == MAP_SPACE_1)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 2; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_SPACE_L1].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPSpace1(u32 warp_ptr)
+{
+    for(int i = 0;i < 2; i++)
+    {
+        if(ap_memory.pc.worlds[AP_SPACE_L1].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_SPACE_L1_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_SPACE_L1_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
+}
+
 // // Switch
 
 void SwitchInitSpace1()
 {
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 6; i++)
     {
         ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].id = ap_memory.pc.id_gen++;
     }
 }
 
-// void SwitchSpace1(u32 ptr, u16 obj_type, u16 item_id)
-// {
-//     if(gvr_current_map == MAP_SPACE_1 && obj_type == 0x0180)
-//     {
-//         switch (item_id)
-//         {
-//             //Cliff Glover Switch
-//             case 0x14E:
-//                 ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr = ptr;
-//                 return;
-//             //Hazard Stripe Ball Switch
-//             case 0x1DD:
-//                 ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].ptr = ptr;
-//                 return;
-//             //Sign Glover Switch
-//             case 0x154:
-//                 ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[2].ptr = ptr;
-//                 return;
-//             //Stone Pillar Ball Switch
-//             case 0x142:
-//                 ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[3].ptr = ptr;
-//                 return;
-//             //UFO Glover Switch
-//             case 0x169:
-//                 ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].ptr = ptr;
-//                 return;
-//             default:
-//                 return;
-//         }
-//     }
-// }
+void SwitchSpace1(u32 ptr, u16 obj_type, u16 item_id)
+{
+    if(gvr_current_map == MAP_SPACE_1 && obj_type == 0x0180)
+    {
+        switch (item_id)
+        {
+            //Aliens Stone Switch
+            case 0x20E:
+                ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr = ptr;
+                space1_aliens = false;
+                return;
+            //Cliff Glover Switch
+            case 0x14E:
+                ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].ptr = ptr;
+                space1_goo = false;
+                return;
+            //Hazard Stripe Ball Switch
+            case 0x1DD:
+                ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[2].ptr = ptr;
+                space1_ufo = false;
+                return;
+            //Sign Glover Switch
+            case 0x154:
+                ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[3].ptr = ptr;
+                space1_thrusters = false;
+                return;
+            //Stone Pillar Ball Switch
+            case 0x142:
+                ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].ptr = ptr;
+                space1_platforms = false;
+                return;
+            //UFO Glover Switch
+            case 0x169:
+                ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[5].ptr = ptr;
+                space1_missile = false;
+                return;
+            default:
+                return;
+        }
+    }
+}
 
-// void MonitorEventsSpace1()
-// {
-//     if(gvr_current_map == MAP_SPACE_1)
-//     {
-//         if(ap_memory.pc.settings.randomize_switches)
-//         {
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[9].ptr != 0) // spin
-//             {
-//                 u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[9].ptr + 0x00B8;
-//                 u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[9].ptr + 0x038;
-//                 u32 gate_ptr = (*(u32*)gate_ptr_offset);
-//                 if(gate_ptr > 0x80000000)
-//                 {
-//                     u32 door_open_offset = gate_ptr + 0x0050;
-//                     if(!pre3_spin_stones && ap_memory.pc.items[AP_SPACE_L1_SPIN_STONES])
-//                     {
-//                         (*(u16*)door_open_offset) = 0x0001;
-//                         (*(u32*)position_addr) = 0xC2BE0000;
-//                         pre3_spin_stones = true;
-//                     }
-//                     if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[9].collected 
-//                         && ((*(u16*)door_open_offset) == 0xFFFE || (*(u16*)door_open_offset) == 0xFF9B)) // Switch not yet collected
-//                     {
-//                         (*(u32*)position_addr) = 0xC2B6E2FC;
-//                     }
-//                     if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[9].collected && (*(u16*)door_open_offset) == 0xFF9B)
-//                     {
-//                         (*(u16*)door_open_offset) == 0xFFFE;
-//                     }
-//                 }
-//             }
+void MonitorEventsSpace1()
+{
+    if(gvr_current_map == MAP_SPACE_1)
+    {
+        if(ap_memory.pc.settings.randomize_switches)
+        {
+            if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr != 0) // aliens
+            {
+                u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr + 0x00B8;
+                u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr + 0x038;
+                u32 gate_ptr = (*(u32*)gate_ptr_offset);
+                if(gate_ptr > 0x80000000)
+                {
+                    u32 door_open_offset = gate_ptr + 0x0050;
+                    if(space1_aliens)
+                    {
+                        (*(u16*)door_open_offset) = 0x0001;
+                        (*(u32*)position_addr) = 0x43750000;
+                        ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr = 0;
+                    }
+                    if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].collected 
+                        && (*(u16*)door_open_offset) == 0xFF9B) // Switch not yet collected
+                    {
+                        (*(u32*)position_addr) = 0x438E8000;
+                    }
+                }
+            }
+            if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].ptr != 0) // goo
+            {
+                u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].ptr + 0x00B8;
+                u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].ptr + 0x038;
+                u32 gate_ptr = (*(u32*)gate_ptr_offset);
+                if(gate_ptr > 0x80000000)
+                {
+                    u32 door_open_offset = gate_ptr + 0x0050;
+                    if(!space1_goo && ap_memory.pc.items[AP_SPACE_L1_GOO_PLATFORMS])
+                    {
+                        (*(u16*)door_open_offset) = 0x0001;
+                        (*(u32*)position_addr) = 0x441EF29C;
+                        space1_goo = true;
+                    }
+                    if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].collected 
+                        && (*(u16*)door_open_offset) == 0xFF9B) // Switch not yet collected
+                    {
+                        (*(u32*)position_addr) = 0x441FB29C;
+                    }
+                }
+            }
+            if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[2].ptr != 0) // ufo
+            {
+                u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[2].ptr + 0x00B8;
+                u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[2].ptr + 0x038;
+                u32 gate_ptr = (*(u32*)gate_ptr_offset);
+                if(gate_ptr > 0x80000000)
+                {
+                    u32 door_open_offset = gate_ptr + 0x0050;
+                    if(!space1_ufo && ap_memory.pc.items[AP_SPACE_L1_UFO])
+                    {
+                        (*(u16*)door_open_offset) = 0x0001;
+                        (*(u32*)position_addr) = 0xC20C0000;
+                        space1_ufo = true;
+                    }
+                    if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[2].collected 
+                        && (*(u16*)door_open_offset) == 0xFFFD) // Switch not yet collected
+                    {
+                        (*(u32*)position_addr) = 0xC1F80000;
+                    }
+                }
+            }
+            if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[3].ptr != 0) // thrusters
+            {
+                u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[3].ptr + 0x00B8;
+                u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[3].ptr + 0x038;
+                u32 gate_ptr = (*(u32*)gate_ptr_offset);
+                if(gate_ptr > 0x80000000)
+                {
+                    u32 door_open_offset = gate_ptr + 0x0050;
+                    if(!space1_thrusters && ap_memory.pc.items[AP_SPACE_L1_FANS])
+                    {
+                        (*(u16*)door_open_offset) = 0x0001;
+                        (*(u32*)position_addr) = 0xC35957AB;
+                        space1_thrusters = true;
+                    }
+                    if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[3].collected 
+                        && (*(u16*)door_open_offset) == 0xFF9B) // Switch not yet collected
+                    {
+                        (*(u32*)position_addr) = 0xC35557AB;
+                    }
+                }
+            }
+            if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].ptr != 0) // platforms
+            {
+                u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].ptr + 0x00B8;
+                u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].ptr + 0x038;
+                u32 gate_ptr = (*(u32*)gate_ptr_offset);
+                if(gate_ptr > 0x80000000)
+                {
+                    u32 door_open_offset = gate_ptr + 0x0050;
+                    if(!space1_platforms && ap_memory.pc.items[AP_SPACE_L1_FLYING_PLATFORMS])
+                    {
+                        (*(u16*)door_open_offset) = 0x0001;
+                        (*(u32*)position_addr) = 0x43551D85;
+                        space1_platforms = true;
+                    }
+                    if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].collected 
+                        && (*(u16*)door_open_offset) == 0xFFFD) // Switch not yet collected
+                    {
+                        (*(u32*)position_addr) = 0x43581D86;
+                    }
+                }
+            }
+            if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[5].ptr != 0) // missle
+            {
+                u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[5].ptr + 0x00B8;
+                u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[5].ptr + 0x038;
+                u32 gate_ptr = (*(u32*)gate_ptr_offset);
+                if(gate_ptr > 0x80000000)
+                {
+                    u32 door_open_offset = gate_ptr + 0x0050;
+                    if(!space1_missile && ap_memory.pc.items[AP_SPACE_L1_MISSILE])
+                    {
+                        (*(u16*)door_open_offset) = 0x0001;
+                        (*(u32*)position_addr) = 0x42040000;
+                        space1_missile = true;
+                    }
+                    if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[5].collected 
+                        && (*(u16*)door_open_offset) == 0xFFFD) // Switch not yet collected
+                    {
+                        (*(u32*)position_addr) = 0x4215B799;
+                    }
+                }
+            }
 
-//             if(!pre3_garib_spawn1 && pre3_garib_timer == 0 && ap_memory.pc.items[AP_SPACE_L1_DROP_GARIBS])
-//             {
-//                 gvr_fn_spawn_garibgroup(6,0);
-//                 gvr_fn_spawn_garibgroup(9,0);
-//                 pre3_garib_spawn1 = true;
-//             }
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].ptr != 0) // floating platforms
-//             {
-//                 u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].ptr + 0x00B8;
-//                 u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].ptr + 0x038;
-//                 u32 gate_ptr = (*(u32*)gate_ptr_offset);
-//                 u32 door_open_offset = gate_ptr + 0x0050;
+        }
+    } 
+    else
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr = 0;
+        }
+    }
+}
 
-//                 if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[4].collected 
-//                     && ((*(u16*)door_open_offset) == 0xFF9B || (*(u16*)door_open_offset) == 0xFFFD)) // Switch not yet collected
-//                 {
-//                     if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 0)
-//                     {
-//                         (*(u32*)position_addr) = 0x43F70000;
-//                     }
-//                     else if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 1)
-//                     {
-//                         (*(u32*)position_addr) = 0x43DCC000;
-//                     }
-//                     else if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 2)
-//                     {
-//                         (*(u32*)position_addr) = 0x43C64000;
-//                     }
-//                     else if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 3)
-//                     {
-//                         (*(u32*)position_addr) = 0x43A20000;
-//                     }
-//                     else
-//                     {
-//                         (*(u32*)position_addr) = 0x4360FBBB;
-//                     }
+void HitSwitchSpace1()
+{
+    if(gvr_current_map == MAP_SPACE_1)
+    {
+        u32 on_switch = (*(u32*)0x803135B8);
+        if(on_switch != 0)
+        {
+            for(int i=0; i < 6; i++)
+            {
+                if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == on_switch 
+                    && i == 3) // sign switch
+                {
+                    u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
+                    (*(u32*)position_addr) = 0xC35957AB;
+                    ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
+                }
+                if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == on_switch 
+                    && i == 1) // cliff switch
+                {
+                    u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
+                    (*(u32*)position_addr) = 0x441EF29C;
+                    ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
+                }
+                if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == on_switch 
+                    && i == 5) // ufo switch
+                {
+                    u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
+                    (*(u32*)position_addr) = 0x42040000;
+                    ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
+                }
+                if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == on_switch 
+                    && i == 0) // alien switch
+                {
+                    // u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
+                    // (*(u32*)position_addr) = 0x43750000;
+                    ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
+                    space1_aliens = true;
+                }
+            }
+        }
+    }
+}
 
-//                     if((*(u16*)door_open_offset) == 0xFF9B)
-//                     {
-//                         (*(u16*)door_open_offset) = 0xFFFD;
-//                     }
-//                 }
-//             }
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr != 0) // spin platforms
-//             {
-//                 u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr + 0x00B8;
-//                 u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].ptr + 0x038;
-//                 u32 gate_ptr = (*(u32*)gate_ptr_offset);
-//                 u32 door_open_offset = gate_ptr + 0x0050;
-
-//                 if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[0].collected 
-//                     && ((*(u16*)door_open_offset) == 0xFF9B || (*(u16*)door_open_offset) == 0xFFFD)) // Switch not yet collected
-//                 {
-//                     (*(u32*)position_addr) = 0x42A79F82;
-//                     if((*(u16*)door_open_offset) == 0xFF9B)
-//                     {
-//                         (*(u16*)door_open_offset) = 0xFFFD;
-//                     }
-//                 }
-//             }
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[7].ptr != 0) //glover switch
-//             {
-//                 u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[7].ptr + 0x00B8;
-//                 u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[7].ptr + 0x038;
-//                 u32 gate_ptr = (*(u32*)gate_ptr_offset);
-//                 u32 door_open_offset = gate_ptr + 0x0050;
-//                 if(pre3_switch_pressed && pre3_switch_timer == 0x1E)
-//                 {
-//                     (*(u16*)door_open_offset) = 0x0001;
-//                     pre3_switch_timer--;
-//                 }
-//                 else if(pre3_switch_pressed && pre3_switch_timer < 0x1E && pre3_switch_timer > 0x0)
-//                 {
-//                     pre3_switch_timer--;
-//                 }
-//                 if(pre3_switch_timer == 0 && (*(u16*)door_open_offset) == 0x0 && pre3_switch_pressed)
-//                 {
-//                     (*(u32*)position_addr) = 0xC2BBCD7E;
-//                     pre3_switch_pressed = false;
-//                 }
-//             } 
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].ptr != 0) // lava pit
-//             {
-//                 u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].ptr + 0x00B8;
-//                 u32 frame_position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[10].ptr + 0x00B8;
-//                 u32 gate_ptr_offset = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].ptr + 0x038;
-//                 u32 gate_ptr = (*(u32*)gate_ptr_offset);
-//                 if(gate_ptr > 0x80000000)
-//                 {
-//                     u32 door_open_offset = gate_ptr + 0x0050;
-//                     if(!pre3_elevator && ap_memory.pc.items[AP_SPACE_L1_DIRT_ELEVATOR])
-//                     {
-//                         (*(u16*)door_open_offset) = 0x0001;
-//                         (*(float*)position_addr) = (*(float*)frame_position_addr) - 2;
-//                         pre3_elevator = true;
-//                     }
-//                     if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].collected 
-//                         && ((*(u16*)door_open_offset) == 0xFFFD || (*(u16*)door_open_offset) == 0xFF9B)) // Switch not yet collected
-//                     {
-//                         (*(u32*)position_addr) = (*(u32*)frame_position_addr);
-//                     }
-//                     if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[1].collected && (*(u16*)door_open_offset) == 0xFF9B)
-//                     {
-//                         (*(u16*)door_open_offset) = 0xFFFD;
-//                     }
-//                 }
-//             }
-//             if(pre3_garib_timer > 0x00)
-//             {
-//                 pre3_garib_timer--;
-//             }
-//             if(pre3_monolith_timer > 0x00)
-//             {
-//                 pre3_monolith_timer--;
-//             }
-//             if(pre3_event_timer > 0x00)
-//             {
-//                 pre3_event_timer--;
-//             }
-//         }
-//     } 
-//     else
-//     {
-//         for(int i = 0; i < 9; i++)
-//         {
-//             ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr = 0;
-//         }
-//     }
-// }
-
-// void PuzzleEventsSpace1(u32 ptr)
-// {
-//     if(!pre3_float_platforms && ap_memory.pc.items[AP_SPACE_L1_FLOATING_PLATFORMS])
-//     {
-//         pre3_float_platforms = true;
-//         pre3_event_timer = 0xC1;
-//         return gvr_fn_activate_puzzle(0x8031E430);
-//     }
-//     if(!pre3_spin_platforms && ap_memory.pc.items[AP_SPACE_L1_LAVA_SPINNING] && pre3_event_timer == 0)
-//     {
-//         pre3_spin_platforms = true;
-//         return gvr_fn_activate_puzzle(0x8031E600);
-//     }
-//     return gvr_fn_activate_puzzle(ptr);
-// }
-
-// u32 MonolithsSpace1(u32 ptr)
-// {
-//     if(pre3_monolith_timer == 0)
-//     {
-//         for(int i = 0; i < 10; i++)
-//         {
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == ptr)
-//             {
-//                 u32 trigger_flag = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x14;
-//                 u32 alpha_flag = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0xA6;
-
-//                 if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected && (*(u32*)0x803249E0) == ptr)
-//                 {
-//                     ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
-//                     (*(u16*)alpha_flag) = 0;
-//                 }
-//                 else if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected)
-//                 {
-//                     (*(u16*)alpha_flag) = 0;
-//                 }
-//                 else
-//                 {
-//                     (*(u16*)alpha_flag) = 0x0064;
-//                 }
-//             }
-//         }
-//         if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] > 0 
-//             && ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == pre3_monolith_lowered)
-//         {
-//             ap_memory.pc.items[AP_DPAD_DOWN] = 0;
-//         }
-//         if(ptr == ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[2].ptr) //Monolith A //runs second
-//         {
-//             if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] >= 1 && !pre3_monolitha && ap_memory.pc.items[AP_DPAD_DOWN])
-//             {
-//                 pre3_monolith_timer = 0xC1;
-//                 pre3_monolitha = true;
-//                 pre3_monolith_lowered++;
-//                 return ptr;
-//             }
-//         }
-//         else if(ptr == ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[3].ptr) //Monolith B //runs first
-//         {
-//             if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] >= 2 && !pre3_monolithb && ap_memory.pc.items[AP_DPAD_DOWN])
-//             {
-//                 pre3_monolith_timer = 0xC1;
-//                 pre3_monolithb = true;
-//                 pre3_monolith_lowered++;
-//                 return ptr;
-//             }
-//         }
-//         else if(ptr == ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[5].ptr) //Monolith C // runs last
-//         {
-//             if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] >= 3 && !pre3_monolithc && ap_memory.pc.items[AP_DPAD_DOWN])
-//             {
-//                 pre3_monolith_timer = 0xC1;
-//                 pre3_monolithc = true;
-//                 pre3_monolith_lowered++;
-//                 return ptr;
-//             }
-//         }
-//         else if(ptr == ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[6].ptr && ap_memory.pc.items[AP_DPAD_DOWN]) //Monolith D // runs third
-//         {
-//             if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 4 && !pre3_monolithd)
-//             {
-//                 pre3_monolithd = true;
-//                 pre3_monolith_timer = 0xC1;
-//                 pre3_monolith_lowered++;
-//                 return ptr;
-//             }
-//         }
-//     }
-//     return 1;
-// }
-
-// void ResetMonolithsSpace1()
-// {
-//     if(gvr_current_map == MAP_SPACE_1)
-//     {
-//         for(int i = 0; i < 10; i++)
-//         {
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0)
-//             {
-//                 if(i == 2 || i == 3 || i == 5 || i == 6)
-//                 {
-//                     u32 trigger_flag = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x14;
-//                     if(!ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected)
-//                     {
-//                         (*(u32*)trigger_flag) = 0;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// void SwitchTreeSpace1()
-// {
-// 	ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[8].collected = 1;
-//     return;
-// }
-
-// void HitSwitchSpace1()
-// {
-//     if(gvr_current_map == MAP_SPACE_1)
-//     {
-//         u32 on_switch = (*(u32*)0x80324C58);
-//         if(on_switch != 0)
-//         {
-//             for(int i=0; i < 10; i++)
-//             {
-//                 if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == on_switch 
-//                     && i == 9)
-//                 {
-//                     u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
-//                     (*(u32*)position_addr) = 0xC2BE0000;
-//                     ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
-//                 }
-//                 if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == on_switch 
-//                     && i == 7)
-//                 {
-//                     u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
-//                     (*(u32*)position_addr) = 0xC2C44D82;
-//                     pre3_switch_timer = 0x1E;
-//                     pre3_switch_pressed = true;
-//                     ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// void HitBallSwitchSpace1(u32 ptr)
-// {
-//     if(gvr_current_map == MAP_SPACE_1)
-//     {
-//         for(int i=0; i < 10; i++)
-//         {
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == ptr &&
-//                 i == 4) //floating platform
-//             {
-//                 u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
-//                 if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 0)
-//                 {
-//                     (*(u32*)position_addr) = 0x43F4C000;
-//                 }
-//                 else if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 1)
-//                 {
-//                     (*(u32*)position_addr) = 0x43DA8000;
-//                 }
-//                 else if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 2)
-//                 {
-//                     (*(u32*)position_addr) = 0x43C40000;
-//                 }
-//                 else if(ap_memory.pc.items[AP_SPACE_L1_PROGRESSIVE_LOWER_MONOLITH] == 3)
-//                 {
-//                     (*(u32*)position_addr) = 0x439FC000;
-//                 }
-//                 else
-//                 {
-//                     (*(u32*)position_addr) = 0x435C7BBB;
-//                 }
-//                 ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
-//             }
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == ptr &&
-//                 i == 0) //spin platform
-//             {
-//                 u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
-//                 (*(u32*)position_addr) = 0x429F391D;
-//                 ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
-//             }
-//             if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == ptr &&
-//                 i == 1) //elevator
-//             {
-//                 u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
-//                 u32 frame_position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[10].ptr + 0x00B8;
-//                 (*(float*)position_addr) = (*(float*)frame_position_addr) - 2;
-//                 ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
-//             }
-//             // if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == ptr &&
-//             //     i == 2) //platform 2
-//             // {
-//             //     u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
-//             //     (*(u32*)position_addr) = 0xC3B2F324;
-//             //     ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
-//             // }
-//         }
-//     }
-// }
+void HitBallSwitchSpace1(u32 ptr)
+{
+    if(gvr_current_map == MAP_SPACE_1)
+    {
+        for(int i=0; i < 6; i++)
+        {
+            if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == ptr &&
+                i == 4) //Floating platforms
+            {
+                u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
+                (*(u32*)position_addr) = 0x43551D85;
+                ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
+            }
+            if(ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr == ptr &&
+                i == 2) //hazard ball switch
+            {
+                u32 position_addr = ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].ptr + 0x00B8;
+                (*(u32*)position_addr) = 0xC20C0000;
+                ap_memory.pc.worlds[AP_SPACE_L1].switch_checks[i].collected = 1;
+            }
+        }
+    }
+}

@@ -8,6 +8,4 @@
     void BacktoHub();
     u8 APHubConverter(u8 map);
     u8 APWorldConverter(u8 map);
-    void RespawnCheckpoint();
-
 #endif

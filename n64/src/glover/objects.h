@@ -94,7 +94,7 @@ typedef struct {
         CHICKEN = 0x001E,
         BAT = 0x0035,
         CLEET = 0x0014,
-        KNIGHT = 0x0035,
+        KNIGHT = 0x0011,
         WEEVIL = 0x0031,
         SAMTEX = 0x0009,
         THROWBOT = 0x001A
@@ -105,5 +105,14 @@ typedef struct {
 
     typedef void (*gvr_fnt_activate_puzzle)(u32 puzzle_ptr);
     #define gvr_fn_activate_puzzle ((gvr_fnt_activate_puzzle)0x8018E914)
+
+    typedef bool (*gvr_fnt_puzzle_condition)(u32 puzzle_ptr);
+    #define gvr_fn_puzzle_condition ((gvr_fnt_puzzle_condition)0x8018FE98)
+
+    typedef void (*gvr_fnt_chicken)(u32 ptr1, u32 ptr2);
+    #define gvr_fn_chicken ((gvr_fnt_chicken)0x80148EBC)
+
+    typedef void (*gvr_fnt_sounds)(u16 sound_id, u16 volume, u8 eighty, u8 zero);
+    #define gvr_fn_sounds ((gvr_fnt_sounds)0x801C08E4)
 
 #endif

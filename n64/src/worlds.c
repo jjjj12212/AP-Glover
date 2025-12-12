@@ -34,7 +34,7 @@ void InitLocationIds()
     LifeInitAtlantisBONUS();
     ap_memory.pc.id_gen++; // Goal
 
-    ap_memory.pc.id_gen++; // Wayroom Tip (not yet ready)
+    TipInitWayroom();
 
     GaribInitCarnival1();
     EnemyInitCarnival1();
@@ -68,7 +68,7 @@ void InitLocationIds()
     LifeInitCarnivalBONUS();
     ap_memory.pc.id_gen++; // Goal
 
-    ap_memory.pc.id_gen++; // Wayroom Tip (not yet ready)
+    TipInitWayroom();
 
     GaribInitPirates1();
     EnemyInitPirates1();
@@ -101,7 +101,7 @@ void InitLocationIds()
     LifeInitPiratesBONUS();
     ap_memory.pc.id_gen++; // Goal
 
-    ap_memory.pc.id_gen++; // Wayroom Tip (not yet ready)
+    TipInitWayroom();
 
     GaribInitPrehistoric1();
     EnemyInitPrehistoric1();
@@ -131,7 +131,7 @@ void InitLocationIds()
     LifeInitPrehistoricBONUS();
     ap_memory.pc.id_gen++; // Goal
 
-    ap_memory.pc.id_gen++; // Wayroom Tip (not yet ready)
+    TipInitWayroom();
 
     GaribInitFear1();
     EnemyInitFear1();
@@ -148,7 +148,6 @@ void InitLocationIds()
     CheckpointInitFear2();
     SwitchInitFear2();
     ap_memory.pc.id_gen++; // Goal
-    ap_memory.pc.id_gen++; // Misc
 
     GaribInitFear3();
     EnemyInitFear3();
@@ -166,7 +165,7 @@ void InitLocationIds()
     LifeInitFearBONUS();
     ap_memory.pc.id_gen++; // Goal
 
-    ap_memory.pc.id_gen++; // Wayroom Tip (not yet ready)
+    TipInitWayroom();
 
     GaribInitSpace1();
     EnemyInitSpace1();
@@ -197,5 +196,18 @@ void InitLocationIds()
     LifeInitSpaceBONUS();
     ap_memory.pc.id_gen++; // Goal
     PotionInitSpaceBONUS();
+
+    ap_memory.pc.id_gen++; // Cheat Chicken
+
+    ap_memory.pc.id_gen++; // Ball turn-in 1
+    ap_memory.pc.id_gen++; // Ball turn-in 2
+    ap_memory.pc.id_gen++; // Ball turn-in 3
+    ap_memory.pc.id_gen++; // Ball turn-in 4
+    ap_memory.pc.id_gen++; // Ball turn-in 5
+    ap_memory.pc.id_gen++; // Ball turn-in 6
+    ap_memory.pc.id_gen++; // Ball turn-in 7
+
+    TipInitTraining();
+    SwitchInitTraining();
 
 }

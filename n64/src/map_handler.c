@@ -120,7 +120,6 @@ void CheckWorld()
                 ap_memory.pc.respawned = false;
                 break;
         }
-        UnlockStar();
         UnlockSecret();
     }
 }
@@ -155,27 +154,6 @@ void MapChange(u8 door_id)
     }
 }
 
-void RespawnCheckpoint()
-{
-    if(gvr_current_map >= 0x10 && gvr_current_map <= 0x13)
-    {
-        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
-        {
-            for(int i = 0;i < 5; i++)
-            {
-                if(ap_memory.pc.worlds[ap_memory.pc.current_world_key].checkpoint_checks[i].id == ap_memory.pc.worlds[ap_memory.pc.current_world_key].warp_id)
-                {
-                    gvr_invuln_timer = 0;
-                    gvr_checkpoint_ptr = ap_memory.pc.worlds[ap_memory.pc.current_world_key].checkpoint_checks[i].warp_ptr;
-                    ap_memory.pc.respawned = true;
-                    gvr_fn_respawn();
-                    ap_memory.pc.need_respawn = false;
-                } 
-            }
-        }
-    }
-}
-
 void BacktoHub()
 {
     if(gvr_wayroom_type == 0x01 || gvr_wayroom_type == 0x03)
@@ -199,6 +177,10 @@ void BacktoHub()
     {
         gvr_current_map = MAP_HUB2;
         spawn_ball_hub += 1;
+    }
+    if(gvr_wayroom_type == 0x0D && gvr_atlantis_bonus_completed == 0x03) // Beat Training Ground
+    {
+        Goal();
     }
 }
 

@@ -585,14 +585,17 @@ void CheckpointPrehistoric1(u32 ptr, u16 item_id)
             //Checkpoint 1
             case 0x25:
                 ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[0].ptr = ptr;
+                ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[0].warp_ptr = gvr_starting_checkpoint;
                 return;
             //Checkpoint 2
             case 0xB0:
                 ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[1].ptr = ptr;
+                ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[1].warp_ptr = 0x80315A50;
                 return;
             //Checkpoint 3
             case 0xB7:
                 ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[2].ptr = ptr;
+                ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[2].warp_ptr = 0x80311140;
                 return;
                 default:
                     return;
@@ -606,19 +609,67 @@ void MonitorCheckpointPrehistoric1()
     {
         for(int i = 0; i < 3; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
 }
 
+void RandomizeCheckpointPrehistoric1()
+{
+    if(gvr_current_map == MAP_PREHISTORIC_1)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 3; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_PREHISTORIC_L1].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPPrehistoric1(u32 warp_ptr)
+{
+    for(int i = 0;i < 3; i++)
+    {
+        if(ap_memory.pc.worlds[AP_PREHISTORIC_L1].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_PREHISTORIC_L1_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_PREHISTORIC_L1_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else if(i == 2 && ap_memory.pc.items[AP_PREHISTORIC_L1_CHECKPOINT3] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
+}
+
+// Events
 void SwitchInitPrehistoric1()
 {
     for(int i = 0; i < 1; i++)

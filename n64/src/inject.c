@@ -10,21 +10,28 @@ bool init = false;
 bool gotdjump = false;
 bool dpad_pressed = false;
 bool changed_ball = false;
-bool force_change = false;
 bool respawned = false;
+bool credits = false;
+bool inversed = false;
 
 void watch_controls()
 {
   if(gvr_controls.DPAD_L && !dpad_pressed) {
-    //DEBUGGING HERE
+    if(ap_memory.pc.items[AP_DEBUG])
+    {
+      gvr_fn_glover_died();
+    }
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_R && !dpad_pressed) {
-    //DEBUGGING HERE
+    if(ap_memory.pc.items[AP_DEBUG])
+    {
+      ap_memory.pc.items[AP_HELICOPTER_TRANSFORM]++;
+    }
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_U && !dpad_pressed) {
-    //DEBUGGING HERE
+
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_D && !dpad_pressed) {
@@ -46,13 +53,13 @@ void force_ball()
   {
     if(animation_ptr->animations->current_animation == 0x0003 && gvr_current_ball == CURRENT_RUBBER_BALL && !changed_ball && gvr_bosscutscene == 0)
     {
-      force_change = true;
+      ap_memory.pc.forcechange = true;
     }
     return;
   }
   else if((u32) animation_ptr->animations == 0x0) {
     changed_ball = false;
-    force_change = false;
+    ap_memory.pc.forcechange = false;
   }
 }
 
@@ -60,8 +67,8 @@ void pre_loop()
 {
   if(!init)
   {
-    ap_memory.pc.version_major = 0;
-    ap_memory.pc.version_minor = 1;
+    ap_memory.pc.version_major = 1;
+    ap_memory.pc.version_minor = 0;
     ap_memory.pc.version_patch = 0;
     InitAPWorlds();
     ap_memory.pc.id_gen = 1;
@@ -70,6 +77,10 @@ void pre_loop()
     InitLocationIds();
     ap_memory.pc.text_ready = 1;
     init = true;
+  }
+  if(gvr_fade_var == 0 && gvr_loaded_timer > 0 && gvr_bosscutscene == 0)
+  {
+    CheckReceivedAPItems();
   }
   if(!ap_memory.pc.items[AP_DOUBLE_JUMP])
   {
@@ -81,23 +92,49 @@ void pre_loop()
     gvr_double_jump_clear1 = 0xAC20FC04;
     gvr_double_jump_clear2 = 0xAC20FC04;
   }
-  CheckReceivedAPItems();
   DialogTimer();
-  DialogCheck();
+  if(gvr_current_map != 0xFF && gvr_current_map != 0x2B)
+  {
+    DialogCheck();
+  }
+  else if(!credits)
+  {
+    display_dialog(0x0A0, 0xC0, 0xFF, 0xFF, 0xFF, 0xFF, 0.75, 0.75, 0, "AP-ROM BY JJJJ12212, SMG065", 1);
+    credits = true;
+  }
+  if(gvr_current_map == 0x2B)
+  {
+    DialogClear(); //Items received prior
+  }
+
+  if(ap_memory.pc.settings.inverse)
+  {
+    if(animation_ptr != 0 && animation_ptr->animations != 0)
+    {
+      if(animation_ptr->animations->current_animation == 0x14 && gvr_difficulty == 0x01 && gvr_fade_var == 0)
+      {
+        gvr_difficulty = 0x00;
+        inversed = true;
+      }
+      else if (inversed && (animation_ptr->animations->current_animation != 0x14 || gvr_fade_var != 0))
+      {
+        gvr_difficulty = 0x01;
+        inversed = false;
+      }
+    }
+  }
+  
+  
+  TrapTimer();
   SetAPGaribs();
   watch_controls();
   force_ball();
   BacktoHub();
   HubHandler();
   CheckWorld();
-  if(ap_memory.pc.settings.deathlink)
-  {
-    CheckDeathlink();
-  }
-  if(ap_memory.pc.settings.taglink)
-  {
-    TagLink();
-  }
+
+  VisitedTiphatsWayroom();
+
   GaribAtlantis1Shiny();
   AllCollectedAtlantis1();
   VisitedTiphatsAtlantis1();
@@ -110,7 +147,6 @@ void pre_loop()
   VisitedTiphatsAtlantis2();
   MonitorCheckpointAtlantis2();
   MonitorEventsAtlantis2();
-  MonitorBrokenBlock();
   MonitorPotionAtlantis2();
 
   GaribAtlantis3Shiny();
@@ -212,7 +248,7 @@ void pre_loop()
   AllCollectedFear3();
   MonitorCheckpointFear3();
   MonitorFallenEnemiesFear3();
-  // MonitorEventsFear3();
+  MonitorEventsFear3();
   MonitorPotionFear3();
 
   GaribFearBONUSShiny();
@@ -221,31 +257,57 @@ void pre_loop()
   GaribSpace1Shiny();
   AllCollectedSpace1();
   MonitorCheckpointSpace1();
-  // MonitorEventsSpace1();
+  MonitorEventsSpace1();
 
   GaribSpace2Shiny();
   AllCollectedSpace2();
   MonitorCheckpointSpace2();
   MonitorFallenEnemiesSpace2();
-  // MonitorEventsSpace2();
+  MonitorEventsSpace2();
   MonitorPotionSpace2();
 
   GaribSpace3Shiny();
   AllCollectedSpace3();
   MonitorCheckpointSpace3();
-  MonitorFallenEnemiesFear3();
-  // MonitorEventsSpace3();
+  MonitorFallenEnemiesSpace3();
+  MonitorEventsSpace3();
   MonitorPotionSpace3();
 
   GaribSpaceBONUSShiny();
   AllCollectedSpaceBONUS();
   MonitorPotionSpaceBONUS();
 
+  MonitorEventsTraining();
+  VisitedTiphatsTraining();
+
   if(ap_memory.pc.settings.randomize_checkpoints)
   {
-    RespawnCheckpoint();
+    RandomizeCheckpointAtlantis1();
+    RandomizeCheckpointAtlantis2();
+    RandomizeCheckpointAtlantis3();
+
+    RandomizeCheckpointCarnival1();
+    RandomizeCheckpointCarnival2();
+    RandomizeCheckpointCarnival3();
+
+    RandomizeCheckpointPirates1();
+    RandomizeCheckpointPirates2();
+    RandomizeCheckpointPirates3();
+
+    RandomizeCheckpointPrehistoric1();
+    RandomizeCheckpointPrehistoric2();
+    RandomizeCheckpointPrehistoric3();
+
+    RandomizeCheckpointFear1();
+    RandomizeCheckpointFear2();
+    RandomizeCheckpointFear3();
+
+    RandomizeCheckpointSpace1();
+    RandomizeCheckpointSpace3();
   }
   monitorObjectIds();//TMP
+
+  UnlockStarWorld();
 }
 
 bool can_input(u32 input)
@@ -361,7 +423,7 @@ bool can_quick_swap()
   return false;
 }
 
-void can_change_ball(u32 balltype, u8 a80, u8 a1, u8 a18) // Also changes Glover via potions
+void can_change_ball(u32 balltype, u32 a80, u8 a1, u8 a18) // Also changes Glover via potions
 {
   if(balltype == TRANSFORM_BEACH_BALL)
   {
@@ -420,9 +482,9 @@ void can_change_ball(u32 balltype, u8 a80, u8 a1, u8 a18) // Also changes Glover
       return;
   }
 
-  if(force_change)
+  if(ap_memory.pc.forcechange)
   {
-    force_change = false;
+    ap_memory.pc.forcechange = false;
     changed_ball = true;
     if(ap_memory.pc.items[AP_RUBBER_BALL])
       return gvr_fn_change_ball(TRANSFORM_RUBBER_BALL, a80, a1, a18);
@@ -595,7 +657,7 @@ bool start_with_APball() //Force changes the ball on pickup
   {
     return true;
   }
-  else if(force_change)
+  else if(ap_memory.pc.forcechange)
   {
     return true;
   }
@@ -684,7 +746,7 @@ void init_objects(u32 ram_ptr, u16 obj_type, u8 zero, u16 obj_id)
 
   GaribFear3(ram_ptr, obj_type, obj_id);
   LifeFear3(ram_ptr, obj_type, obj_id);
-  // SwitchFear3(ram_ptr, obj_type, obj_id);
+  SwitchFear3(ram_ptr, obj_type, obj_id);
   PotionFear3(ram_ptr, obj_type, obj_id);
 
   GaribFearBONUS(ram_ptr, obj_type, obj_id);
@@ -692,17 +754,17 @@ void init_objects(u32 ram_ptr, u16 obj_type, u8 zero, u16 obj_id)
 
   GaribSpace1(ram_ptr, obj_type, obj_id);
   LifeSpace1(ram_ptr, obj_type, obj_id);
-  // SwitchSpace1(ram_ptr, obj_type, obj_id);
+  SwitchSpace1(ram_ptr, obj_type, obj_id);
 
   GaribSpace2(ram_ptr, obj_type, obj_id);
   LifeSpace2(ram_ptr, obj_type, obj_id);
-  // SwitchSpace2(ram_ptr, obj_type, obj_id);
+  SwitchSpace2(ram_ptr, obj_type, obj_id);
   PotionSpace2(ram_ptr, obj_type, obj_id);
 
 
   GaribSpace3(ram_ptr, obj_type, obj_id);
   LifeSpace3(ram_ptr, obj_type, obj_id);
-  // SwitchSpace3(ram_ptr, obj_type, obj_id);
+  SwitchSpace3(ram_ptr, obj_type, obj_id);
   PotionSpace3(ram_ptr, obj_type, obj_id);
 
 
@@ -710,6 +772,7 @@ void init_objects(u32 ram_ptr, u16 obj_type, u8 zero, u16 obj_id)
   LifeSpaceBONUS(ram_ptr, obj_type, obj_id);
   PotionSpaceBONUS(ram_ptr, obj_type, obj_id);
 
+  SwitchTraining(ram_ptr, obj_type, obj_id);
 
   //TMP
   if(obj_type == 0x00B0 || obj_type == 0x0100) // Garibs, Life, Potions
@@ -818,11 +881,9 @@ u32 collected_switch(u8 unkown, u32 obj_ptr)
   HitSwitchPrehistoric2();
   HitSwitchPrehistoric3();
   HitSwitchFear1();
-  //HitSwitchFear3();
-  //HitSwitchSpace1();
-  //HitSwitchSpace2();
-  //HitSwitchSpace3();
-
+  HitSwitchSpace1();
+  HitSwitchSpace3();
+  HitSwitchTraining();
   return (*(u32*) 0x802903B0);
 }
 
@@ -840,11 +901,11 @@ void ball_switch(u32 unkown, u32 ptr)
   HitBallSwitchPrehistoric3(ptr);
   HitBallSwitchFear1(ptr);
   HitBallSwitchFear2(ptr);
-  //HitBallSwitchFear3(ptr);
-  //HitBallSwitchSpace1(ptr);
-  //HitBallSwitchSpace2(ptr);
-  //HitBallSwitchSpace3(ptr);
-
+  HitBallSwitchFear3(ptr);
+  HitBallSwitchSpace1(ptr);
+  HitBallSwitchSpace2(ptr);
+  HitBallSwitchSpace3(ptr);
+  HitBallSwitchTraining(ptr);
 }
 
 void ball_switch_alt()
@@ -862,25 +923,11 @@ void ball_switch_alt()
   HitBallSwitchPrehistoric3(switch_ptr);
   HitBallSwitchFear1(switch_ptr);
   HitBallSwitchFear2(switch_ptr);
-  //HitBallSwitchFear3(switch_ptr);
-  //HitBallSwitchSpace1(switch_ptr);
-  //HitBallSwitchSpace2(switch_ptr);
-  //HitBallSwitchSpace3(switch_ptr);
-
-}
-
-
-void trigger_block(u32 ptr_minus_30)
-{
-  if(gvr_current_map == MAP_ATLANTIS_2)
-  {
-    u32 real_ptr = ptr_minus_30 - 0x30;
-    if(ap_memory.pc.worlds[AP_ATLANTIS_L2].switch_checks[1].ptr == real_ptr)
-    {
-      return;
-    }
-  }
-  return gvr_fn_unkown_fn(ptr_minus_30);
+  HitBallSwitchFear3(switch_ptr);
+  HitBallSwitchSpace1(switch_ptr);
+  HitBallSwitchSpace2(switch_ptr);
+  HitBallSwitchSpace3(switch_ptr);
+  HitBallSwitchTraining(switch_ptr);
 }
 
 void spawned_object(u32 unkown_ptr, u32 object_ptr, u32 zero, u16 obj_rand_id)
@@ -912,6 +959,7 @@ void spawned_object(u32 unkown_ptr, u32 object_ptr, u32 zero, u16 obj_rand_id)
 
 void init_tiphats(u32 ram_ptr, u16 obj_type, u8 zero, u16 obj_id)
 {
+  TipWayroom(ram_ptr, obj_type, obj_id);
   TipAtlantis1(ram_ptr, obj_type, obj_id);
   TipAtlantis2(ram_ptr, obj_type, obj_id);
   TipCarnival1(ram_ptr, obj_type, obj_id);
@@ -919,6 +967,7 @@ void init_tiphats(u32 ram_ptr, u16 obj_type, u8 zero, u16 obj_id)
   TipPirates1(ram_ptr, obj_type, obj_id);
   TipPirates3(ram_ptr, obj_type, obj_id);
   TipFear2(ram_ptr, obj_type, obj_id);
+  TipTraining(ram_ptr, obj_type, obj_id);
 
   if(obj_type == 0x00C0)
   {
@@ -930,6 +979,7 @@ void init_tiphats(u32 ram_ptr, u16 obj_type, u8 zero, u16 obj_id)
 void collect_tiphats(u32 unknown, u32 ram_ptr_plus_8, u8 unknown2, u16 be)
 {
   u32 real_item_ptr = ram_ptr_plus_8 - 0x0008;
+  CollectedTipWayroom(real_item_ptr);
   CollectedTipAtlantis1(real_item_ptr);
   CollectedTipAtlantis2(real_item_ptr);
   CollectedTipCarnival1(real_item_ptr);
@@ -937,6 +987,7 @@ void collect_tiphats(u32 unknown, u32 ram_ptr_plus_8, u8 unknown2, u16 be)
   CollectedTipPirates1(real_item_ptr);
   CollectedTipPirates3(real_item_ptr);
   CollectedTipFear2(real_item_ptr);
+  CollectedTipTraining(real_item_ptr);
 
   CollectedObjectIds(real_item_ptr); //TMP
   return gvr_fn_talk_tip(unknown, ram_ptr_plus_8, unknown2, be);
@@ -1030,7 +1081,6 @@ u32 lose_life()
   } 
   else
   {
-    force_change = true;
     gvr_current_lives = gvr_current_lives - 1;
     return gvr_current_lives;
   }
@@ -1109,6 +1159,10 @@ u32 puzzle_switch_condition(u32 puzzle_ptr)
 
 void puzzle_activate(u32 act_ptr)
 {
+  if(gvr_current_map == MAP_ATLANTIS_2)
+  {
+    return PuzzleEventsAtlantis2(act_ptr);
+  }
   if(act_ptr == 0x8031E430 && gvr_current_map == MAP_PREHISTORIC_3)
   {
     return;
@@ -1129,8 +1183,120 @@ void puzzle_activate(u32 act_ptr)
   {
     return PuzzleEventsFear2(act_ptr);
   }
+  if(gvr_current_map == MAP_FORTRESS_3)
+  {
+    return PuzzleEventsFear3(act_ptr);
+  }
+  if(gvr_current_map == MAP_SPACE_3)
+  {
+    return PuzzleEventsSpace3(act_ptr);
+  }
   gvr_fn_activate_puzzle(act_ptr);
 }
+
+void chicken_check(u32 ptr1, u32 ptr2)
+{
+  ap_memory.pc.chicken = 1;
+  return gvr_fn_chicken(ptr1, ptr2);
+}
+
+bool puzzle_condition(u32 act_ptr)
+{
+  if(gvr_current_map == MAP_ATLANTIS_2)
+  {
+    if(PuzzleConditionsAtlantis2(act_ptr))
+    {
+      return true;
+    }
+  }
+  return gvr_fn_puzzle_condition(act_ptr);
+}
+
+bool checkpointItemPauseSelect(u32 checkpointl_ptr)
+{
+    if(checkpointl_ptr == 0)
+    { 
+      return 1;
+    }
+    u32 checkpoint_ptr_offset = checkpointl_ptr + 0x0054;
+    u32 checkpoint_ptr = (*(u32*)checkpoint_ptr_offset);
+    if(checkpoint_ptr == 0)
+    {
+        return 1;
+    }
+    switch(gvr_current_map)
+    {
+      case MAP_ATLANTIS_1:
+        return CheckpointAPAtlantis1(checkpoint_ptr);
+      case MAP_ATLANTIS_2:
+        return CheckpointAPAtlantis2(checkpoint_ptr);
+      case MAP_ATLANTIS_3:
+        return CheckpointAPAtlantis3(checkpoint_ptr);
+      
+      case MAP_CARNIVAL_1:
+        return CheckpointAPCarnival1(checkpoint_ptr);
+      case MAP_CARNIVAL_2:
+        return CheckpointAPCarnival2(checkpoint_ptr);
+      case MAP_CARNIVAL_3:
+        return CheckpointAPCarnival3(checkpoint_ptr);
+
+      case MAP_PIRATES_1:
+        return CheckpointAPPirates1(checkpoint_ptr);
+      case MAP_PIRATES_2:
+        return CheckpointAPPirates2(checkpoint_ptr);
+      case MAP_PIRATES_3:
+        return CheckpointAPPirates3(checkpoint_ptr);
+
+      case MAP_PREHISTORIC_1:
+        return CheckpointAPPrehistoric1(checkpoint_ptr);
+      case MAP_PREHISTORIC_2:
+        return CheckpointAPPrehistoric2(checkpoint_ptr);
+      case MAP_PREHISTORIC_3:
+        return CheckpointAPPrehistoric3(checkpoint_ptr);
+
+      case MAP_FORTRESS_1:
+        return CheckpointAPFear1(checkpoint_ptr);
+      case MAP_FORTRESS_2:
+        return CheckpointAPFear2(checkpoint_ptr);
+      case MAP_FORTRESS_3:
+        return CheckpointAPFear3(checkpoint_ptr);
+
+      case MAP_SPACE_1:
+        return CheckpointAPSpace1(checkpoint_ptr);
+      case MAP_SPACE_3:
+        return CheckpointAPSpace3(checkpoint_ptr);
+
+      default:
+        return 0;
+    }
+    return 0;
+}
+
+u32 TipText(u32 orig_txt_ptr)
+{
+  TipTextHintTraining(orig_txt_ptr);
+  TipTextHintAtlantis1(orig_txt_ptr);
+  TipTextHintAtlantis2(orig_txt_ptr);
+  TipTextHintCarnival1(orig_txt_ptr);
+  TipTextHintCarnival2(orig_txt_ptr);
+  TipTextHintPirates1(orig_txt_ptr);
+  TipTextHintPirates3(orig_txt_ptr);
+  TipTextHintFear2(orig_txt_ptr);
+  TipTextHintWayroom(orig_txt_ptr);
+
+  return (*(u32*)orig_txt_ptr);
+}
+
+void force_change_ball(u32 balltype)
+{
+  ap_memory.pc.forcechange = true;
+  return gvr_fn_change_balltype(balltype);
+}
+
+extern bool checkpointItemPauseSelectDisplaced(u32 checkpointl_ptr);
+extern bool checkpointItemPauseDisplaced(u32 checkpointl_ptr);
+extern u32 TipTextDisplaced(u32 orig_txt_ptr);
+
 
 u32 inject_hooks() {
   AP_MEMORY_PTR = &ap_memory;
@@ -1151,6 +1317,8 @@ u32 inject_hooks() {
   //changing balls
   util_inject(UTIL_INJECT_FUNCTION, 0x801B3CF0, (u32)can_change_ball, 0);
   util_inject(UTIL_INJECT_FUNCTION, 0x801ADAC0, (u32)can_change_ball, 0);
+  util_inject(UTIL_INJECT_FUNCTION, 0x8018DA7C, (u32)force_change_ball, 0);
+
 
   //Start with AP Ball
   util_inject(UTIL_INJECT_FUNCTION, 0x8016A9D8, (u32)start_with_APball, 1);
@@ -1160,6 +1328,10 @@ u32 inject_hooks() {
   util_inject(UTIL_INJECT_FUNCTION, 0x801404F8, (u32)init_objects, 1);
   //collected Garibs and Life
   util_inject(UTIL_INJECT_FUNCTION, 0x8018BB9C, (u32)collected_object, 0);
+  util_inject(UTIL_INJECT_FUNCTION, 0x801AB50C, (u32)collected_object, 0); //Carnival Bonus Garibs
+  util_inject(UTIL_INJECT_FUNCTION, 0x801AB4CC, (u32)collected_object, 0); //Carnival Bonus Life
+
+
   //Spawned Garibs from Enemies
   util_inject(UTIL_INJECT_FUNCTION, 0x80195E94, (u32)spawned_object, 0);
   if(ap_memory.pc.settings.garib_logic != 0) // don't increase Garib Counter
@@ -1186,12 +1358,15 @@ u32 inject_hooks() {
   }
   if(ap_memory.pc.settings.randomize_switches != 0)
   {
-    util_inject(UTIL_INJECT_RAW, 0x801748F8, 0x2402FFFF, 0);
-    util_inject(UTIL_INJECT_RAW, 0x80174A08, 0x2403FFFF, 0);
-    util_inject(UTIL_INJECT_RAW, 0x80174A54, (u32) 0, 0);
-    util_inject(UTIL_INJECT_FUNCTION, 0x801749F8, (u32)collected_switch, 1);
-    if(gvr_current_map == MAP_CARNIVAL_BONUS || gvr_current_map == MAP_FORTRESS_BONUS || gvr_current_map == MAP_FORTRESS_BOSS)
+    if(gvr_current_map == MAP_CARNIVAL_BONUS || gvr_current_map == MAP_FORTRESS_BONUS || gvr_current_map == MAP_FORTRESS_BOSS
+      || gvr_current_map == MAP_SPACE_BOSS_1 || gvr_current_map == MAP_SPACE_BOSS_2 || gvr_current_map == MAP_SPACE_BOSS_3)
     {
+      util_inject(UTIL_INJECT_RAW, 0x801748F8, 0x94420050, 0);
+      util_inject(UTIL_INJECT_RAW, 0x80174A08, 0x84430050, 0);
+      util_inject(UTIL_INJECT_RAW, 0x80174A54, 0xA4620050, 0);
+      util_inject(UTIL_INJECT_RAW, 0x801749F8, 0x3C028029, 0);
+      util_inject(UTIL_INJECT_RAW, 0x801749FC, 0x8C4203B0, 0);
+
       util_inject(UTIL_INJECT_RAW, 0x8015A7E0, 0x24030001, 0);
       util_inject(UTIL_INJECT_RAW, 0x8015A7E4, 0xA4430050, 0);
       util_inject(UTIL_INJECT_RAW, 0x8015959C, 0x24030001, 0);
@@ -1199,28 +1374,57 @@ u32 inject_hooks() {
     }
     else
     {
+      util_inject(UTIL_INJECT_RAW, 0x801748F8, 0x2402FFFF, 0);
+      util_inject(UTIL_INJECT_RAW, 0x80174A08, 0x2403FFFF, 0);
+      util_inject(UTIL_INJECT_RAW, 0x80174A54, (u32) 0, 0);
+      util_inject(UTIL_INJECT_FUNCTION, 0x801749F8, (u32)collected_switch, 1);
+
       util_inject(UTIL_INJECT_FUNCTION, 0x8015A7E0, (u32)ball_switch, 1); //Ball Switch alt
       util_inject(UTIL_INJECT_FUNCTION, 0x8015959C, (u32)ball_switch_alt, 1); //Ball Switch alt
     }
-    util_inject(UTIL_INJECT_FUNCTION, 0x8018E848, (u32)trigger_block, 0);
+    // util_inject(UTIL_INJECT_FUNCTION, 0x8018E848, (u32)trigger_block, 0);
     util_inject(UTIL_INJECT_FUNCTION, 0x8018F408, (u32)puzzle_spawn_garibs, 1);
     util_inject(UTIL_INJECT_FUNCTION, 0x80190B54, (u32)puzzle_switch_condition, 1);
     util_inject(UTIL_INJECT_RAW, 0x80190B64, (u32)0, 0);
 
+    util_inject(UTIL_INJECT_FUNCTION, 0x8018E830, (u32)puzzle_condition, 0);
     util_inject(UTIL_INJECT_FUNCTION, 0x8018E848, (u32)puzzle_activate, 0);
 
   }
   //Hijack Potions
   util_inject(UTIL_INJECT_FUNCTION, 0x8018C490, (u32)ball_powerup, 1); 
   util_inject(UTIL_INJECT_FUNCTION, 0x8018EEA0, (u32)spawned_potion, 0);
+  //util_inject(UTIL_INJECT_FUNCTION, 0x8018C4A0, (u32)glover_powerup, 0); glover animation
 
   //deathlink
   util_inject(UTIL_INJECT_FUNCTION, 0x801721A8, (u32)deathlink_trigger, 1);
-  util_inject(UTIL_INJECT_FUNCTION, 0x80174128, (u32)deathlink_trigger, 1);
+  util_inject(UTIL_INJECT_FUNCTION, 0x80174128, (u32)deathlink_trigger, 1); //Test
   util_inject(UTIL_INJECT_FUNCTION, 0x801B0D94, (u32)deathlink_trigger, 1);
 
   //No more Lightning flashes
+  //util_inject(UTIL_INJECT_RAW, 0x801BB234, (u32)0, 0); 
   util_inject(UTIL_INJECT_RAW, 0x801BB2E0, (u32)0, 0); 
+
+  util_inject(UTIL_INJECT_FUNCTION, 0x801A6398, (u32)chicken_check, 0);
+
+  //Training Grounds Fix when ball is overworld
+  util_inject(UTIL_INJECT_RAW, 0x80124C54, (u32)0x10420011, 0); 
+
+  if(ap_memory.pc.settings.checkpoint_items)
+  {
+    util_inject(UTIL_INJECT_FUNCTION, 0x80126C74, (u32)checkpointItemPauseSelectDisplaced, 1); //Selecting Checkpoint in pause menu
+    util_inject(UTIL_INJECT_RAW, 0x80126C7C, (u32)0, 0);
+    util_inject(UTIL_INJECT_RAW, 0x80126C80, (u32)0, 0);
+
+    util_inject(UTIL_INJECT_FUNCTION, 0x80126A38, (u32)checkpointItemPauseDisplaced, 1); //Pausing
+    util_inject(UTIL_INJECT_RAW, 0x80126A40, (u32)0, 0);
+    util_inject(UTIL_INJECT_RAW, 0x80126A44, (u32)0, 0);
+  }
+
+  if(ap_memory.pc.settings.tip_hints)
+  {
+    util_inject(UTIL_INJECT_FUNCTION, 0x801B8698, (u32)TipTextDisplaced, 1);
+  }
 
   return 0;
 }

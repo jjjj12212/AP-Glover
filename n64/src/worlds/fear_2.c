@@ -519,7 +519,7 @@ void CollectedTipFear2(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].ptr == ptr)
             {
                 ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].collected = 1;
-                ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].ptr = 0;
+                ap_memory.pc.last_tip_ptr = ptr;
             }
         }
     }
@@ -537,6 +537,40 @@ void VisitedTiphatsFear2()
                 if(object->visited == 0 && ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].collected == 1)
                 {
                     object->visited = 1;
+                }
+            }
+        }
+    }
+}
+
+void TipTextHintFear2(u32 orig_txt_ptr)
+{
+    if(gvr_current_map == MAP_FORTRESS_2)
+    {
+        u32 copy_ptr = orig_txt_ptr;
+        for(int i = 0; i < 1; i++)
+        {
+            if(ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].ptr == ap_memory.pc.last_tip_ptr)
+            {
+                if(ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].tip_text.last_line == 0)
+                {
+                    return;
+                }
+                for(int line = 0; line < ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].tip_text.last_line; line++)
+                {
+                    u32 text_action = copy_ptr + 4;
+                    (*(u32*)copy_ptr) = (u32)&ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].tip_text.lines[line].text;
+
+                    if(line + 1 == ap_memory.pc.worlds[AP_FORTRESS_L2].tip_checks[i].tip_text.last_line)
+                    {
+                        (*(u32*)text_action) = 0x00000002;
+                        return;
+                    }
+                    else
+                    {
+                        copy_ptr += 8;
+                        (*(u32*)text_action) = 0x00000000;
+                    }
                 }
             }
         }
@@ -562,16 +596,20 @@ void CheckpointFear2(u32 ptr, u16 item_id)
             //Checkpoint 1
             case 0x25:
                 ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[0].ptr = ptr;
+                ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[0].warp_ptr = gvr_starting_checkpoint;
                 return;
             //Checkpoint 2
             case 0x190:
                 if(ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[1].ptr == 0) // 3
                 {
                     ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[1].ptr = ptr;
+                    ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[1].warp_ptr = 0x802F50E0;
+
                 }
                 else // 3
                 {
                     ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[2].ptr = ptr;
+                    ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[2].warp_ptr = 0x802F4F60;
                 }
             default:
                 return;
@@ -585,24 +623,71 @@ void MonitorCheckpointFear2()
     {
         for(int i = 0; i < 3; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
 }
 
+void RandomizeCheckpointFear2()
+{
+    if(gvr_current_map == MAP_FORTRESS_2)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 3; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_FORTRESS_L2].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPFear2(u32 warp_ptr)
+{
+    for(int i = 0;i < 3; i++)
+    {
+        if(ap_memory.pc.worlds[AP_FORTRESS_L2].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_FORTRESS_L2_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_FORTRESS_L2_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else if(i == 2 && ap_memory.pc.items[AP_FORTRESS_L2_CHECKPOINT3] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
+}
+
 // // Switch
 
 void SwitchInitFear2()
 {
-    for(int i = 0; i < 3; i++)
+    for(int i = 0; i < 4; i++)
     {
         ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[i].id = ap_memory.pc.id_gen++;
     }
@@ -615,10 +700,10 @@ void SwitchFear2(u32 ptr, u16 obj_type, u16 item_id)
         switch (item_id)
         {    
             //Mummy 
-
+            // switch_checks[0]
             //Push Switch
 		    //case 0x146/0x148(?):
-			// ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[0].ptr = ptr;
+			// ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[1].ptr = ptr;
 			// return;
             //Push Target
             case 0x1FB:
@@ -628,7 +713,7 @@ void SwitchFear2(u32 ptr, u16 obj_type, u16 item_id)
                 return;
             //Slope Target
             case 0x193:
-                //ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[2].ptr = ptr;
+                //ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[3].ptr = ptr;
                 fear2_gates = false;
                 fear2_mummy = false;
                 return;
@@ -678,7 +763,7 @@ void PuzzleEventsFear2(u32 ptr)
     }
     if(ptr == 0x8030CB00) // Mummy
     {
-        ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[0].collected = 1; //?
+        ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[0].collected = 1;
         return;
     }
     if(!fear2_gates && ap_memory.pc.items[AP_FORTRESS_L2_CHECKPOINT_GATES] >= 2)
@@ -698,7 +783,7 @@ void HitBallSwitchFear2(u32 ptr)
 {
     if(gvr_current_map == MAP_FORTRESS_2)
     {
-        for(int i=0; i < 2; i++)
+        for(int i=0; i < 4; i++)
         {
             if(ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_FORTRESS_L2].switch_checks[i].ptr == ptr &&
                 i == 2) //push target

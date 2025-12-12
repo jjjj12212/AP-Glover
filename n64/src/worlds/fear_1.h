@@ -16,6 +16,8 @@
     void CheckpointInitFear1();
     void CheckpointFear1(u32 ptr,  u16 item_id);
     void MonitorCheckpointFear1();
+    void RandomizeCheckpointFear1();
+    bool CheckpointAPFear1(u32 warp_ptr);
     // //Switch
     void SwitchInitFear1();
     void SwitchFear1(u32 ptr, u16 obj_type, u16 item_id);

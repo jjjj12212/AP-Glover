@@ -16,16 +16,14 @@
     void CheckpointInitSpace1();
     void CheckpointSpace1(u32 ptr,  u16 item_id);
     void MonitorCheckpointSpace1();
+    void RandomizeCheckpointSpace1();
+    bool CheckpointAPSpace1(u32 warp_ptr);
     // //Switch
     void SwitchInitSpace1();
-    // void SwitchSpace1(u32 ptr, u16 obj_type, u16 item_id);
-    // void MonitorEventsSpace1();
-    // void SwitchTreeSpace1();
-    // void PuzzleEventsSpace1(u32 ptr);
-    // u32 MonolithsSpace1(u32 ptr);
-    // void ResetMonolithsSpace1();
-    // void HitSwitchSpace1();
-    // void HitBallSwitchSpace1(u32 ptr);
+    void SwitchSpace1(u32 ptr, u16 obj_type, u16 item_id);
+    void MonitorEventsSpace1();
+    void HitSwitchSpace1();
+    void HitBallSwitchSpace1(u32 ptr);
     // //Enemies
     void EnemyInitSpace1();
     void EnemySpace1(u32 ptr, u16 obj_type, u16 item_id);

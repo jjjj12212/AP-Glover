@@ -17,13 +17,18 @@
     void TipAtlantis2(u32 ptr, u16 obj_type, u16 item_id);
     void CollectedTipAtlantis2(u32 ptr);
     void VisitedTiphatsAtlantis2();
+    void TipTextHintAtlantis2(u32 orig_txt_ptr);
     //Checkpoints
     void CheckpointInitAtlantis2();
     void CheckpointAtlantis2(u32 ptr, u16 item_id);
     void MonitorCheckpointAtlantis2();
+    void RandomizeCheckpointAtlantis2();
+    bool CheckpointAPAtlantis2(u32 warp_ptr);
     //Switch
     void SwitchInitAtlantis2();
     void SwitchAtlantis2(u32 ptr, u16 obj_type, u16 item_id);
+    void PuzzleEventsAtlantis2(u32 ptr);
+    bool PuzzleConditionsAtlantis2(u32 ptr);
     void SwitchBlockAtlantis2(u32 ptr, u16 obj_type, u16 item_id);
 
     void MonitorEventsAtlantis2();

@@ -661,7 +661,7 @@ void CollectedTipPirates3(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_PIRATES_L3].tip_checks[i].ptr == ptr)
             {
                 ap_memory.pc.worlds[AP_PIRATES_L3].tip_checks[i].collected = 1;
-                ap_memory.pc.worlds[AP_PIRATES_L3].tip_checks[i].ptr = 0;
+                ap_memory.pc.last_tip_ptr = ptr;
             }
         }
     }
@@ -685,6 +685,39 @@ void VisitedTiphatsPirates3()
     }
 }
 
+void TipTextHintPirates3(u32 orig_txt_ptr)
+{
+    if(gvr_current_map == MAP_PIRATES_3)
+    {
+        u32 copy_ptr = orig_txt_ptr;
+        for(int i = 0; i < 1; i++)
+        {
+            if(ap_memory.pc.worlds[AP_PIRATES_L3].tip_checks[i].ptr == ap_memory.pc.last_tip_ptr)
+            {
+                if(ap_memory.pc.worlds[AP_PIRATES_L3].tip_checks[i].tip_text.last_line == 0)
+                {
+                    return;
+                }
+                for(int line = 0; line < ap_memory.pc.worlds[AP_PIRATES_L3].tip_checks[i].tip_text.last_line; line++)
+                {
+                    u32 text_action = copy_ptr + 4;
+                    (*(u32*)copy_ptr) = (u32)&ap_memory.pc.worlds[AP_PIRATES_L3].tip_checks[i].tip_text.lines[line].text;
+
+                    if(line + 1 == ap_memory.pc.worlds[AP_PIRATES_L3].tip_checks[i].tip_text.last_line)
+                    {
+                        (*(u32*)text_action) = 0x00000002;
+                        return;
+                    }
+                    else
+                    {
+                        copy_ptr += 8;
+                        (*(u32*)text_action) = 0x00000000;
+                    }
+                }
+            }
+        }
+    }
+}
 //Checkpoint
 
 void CheckpointInitPirates3()
@@ -704,21 +737,26 @@ void CheckpointPirates3(u32 ptr, u16 item_id)
             //Checkpoint 1
 		case 0x25:
 			ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[0].ptr = ptr;
+            ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[0].warp_ptr = gvr_starting_checkpoint;
 			return;
 		//Checkpoint 2
 		case 0x176:
             if(ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[1].ptr == 0) // 2
             {
                 ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[1].ptr = ptr;
+                ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[1].warp_ptr = 0x80307770;
+
             }
             else // 3
             {
                 ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[2].ptr = ptr;
+                ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[2].warp_ptr = 0x803075F0;
             }
 			return;
 		//Checkpoint 4
 		case 0x1F2:
 			ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[3].ptr = ptr;
+            ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[3].warp_ptr = 0x802FF580;
 			return;
             default:
                 return;
@@ -732,19 +770,69 @@ void MonitorCheckpointPirates3()
     {
         for(int i = 0; i < 4; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
 }
 
+void RandomizeCheckpointPirates3()
+{
+    if(gvr_current_map == MAP_PIRATES_3)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 4; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_PIRATES_L3].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPPirates3(u32 warp_ptr)
+{
+    for(int i = 0;i < 4; i++)
+    {
+        if(ap_memory.pc.worlds[AP_PIRATES_L3].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_PIRATES_L3_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_PIRATES_L3_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else if(i == 2 && ap_memory.pc.items[AP_PIRATES_L3_CHECKPOINT3] > 0)
+            {
+                return 0;
+            }
+            else if(i == 3 && ap_memory.pc.items[AP_PIRATES_L3_CHECKPOINT4] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
+}
 // Switch
 
 void SwitchInitPirates3()
@@ -809,6 +897,10 @@ void MonitorEventsPirates3()
                     && ((*(u16*)door_open_offset) == 0xFFFD || (*(u16*)door_open_offset) == 0xFF9B)) // Switch not yet collected
                 {
                     (*(u32*)position_addr) = 0x434EF4BE;
+                    if((*(u16*)door_open_offset) == 0xFF9B)
+                    {
+                        (*(u16*)door_open_offset) = 0xFFFD;
+                    }
                 }
             }   
             if(ap_memory.pc.worlds[AP_PIRATES_L3].switch_checks[1].ptr != 0) //spin platform
@@ -866,6 +958,10 @@ void MonitorEventsPirates3()
                     && ((*(u16*)door_open_offset) == 0xFF9B || (*(u16*)door_open_offset) == 0xFFFD)) // Switch not yet collected
                 {
                     (*(u32*)position_addr) = 0xC421BBE7;
+                    if((*(u16*)door_open_offset) == 0xFF9B)
+                    {
+                        (*(u16*)door_open_offset) = 0xFFFD;
+                    }
                 }
             }
               

@@ -17,10 +17,13 @@
     void TipPirates1(u32 ptr, u16 obj_type, u16 item_id);
     void CollectedTipPirates1(u32 ptr);
     void VisitedTiphatsPirates1();
+    void TipTextHintPirates1(u32 orig_txt_ptr);
     //Checkpoints
     void CheckpointInitPirates1();
     void CheckpointPirates1(u32 ptr,  u16 item_id);
     void MonitorCheckpointPirates1();
+    void RandomizeCheckpointPirates1();
+    bool CheckpointAPPirates1(u32 warp_ptr);
     //Switch
     void SwitchInitPirates1();
     void SwitchPirates1(u32 ptr, u16 obj_type, u16 item_id);

@@ -443,23 +443,6 @@ void MonitorFallenEnemiesFear1()
                 }
             }
         }
-        for(int i = 2; i <= 4; i++)
-        {
-            if(ap_memory.pc.worlds[AP_FORTRESS_L1].enemy_checks[i].ptr != 0) // Knight
-            {
-                u32 spawn_ptr = ap_memory.pc.worlds[AP_FORTRESS_L1].enemy_checks[i].ptr + 0x22;
-                if((*(u8*)spawn_ptr) == 1)
-                {
-                    u32 ypos = ap_memory.pc.worlds[AP_FORTRESS_L1].enemy_checks[i].ptr + 0x38;
-                    u32 yvalue = (*(u32*)ypos);
-                    if(yvalue >= 0xC3160000) //(-150 in float)
-                    {
-                        ap_memory.pc.worlds[AP_FORTRESS_L1].enemy_checks[i].collected = 1;
-                        ap_memory.pc.worlds[AP_FORTRESS_L1].enemy_checks[i].ptr = 0;
-                    }
-                }
-            }
-        }
         if(ap_memory.pc.worlds[AP_FORTRESS_L1].enemy_checks[6].ptr != 0) // Wind-up
         {
             u32 spawn_ptr = ap_memory.pc.worlds[AP_FORTRESS_L1].enemy_checks[6].ptr + 0x22;
@@ -552,14 +535,17 @@ void CheckpointFear1(u32 ptr, u16 item_id)
             //Checkpoint 1
             case 0x26:
                 ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[0].ptr = ptr;
+                ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[0].warp_ptr = gvr_starting_checkpoint;
                 return;
             //Checkpoint 2
             case 0x78:
                 ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[1].ptr = ptr;
+                ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[1].warp_ptr = 0x8030E8F0;
                 return;
             //Checkpoint 3
             case 0x1D8:
                 ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[2].ptr = ptr;
+                ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[2].warp_ptr = 0x802FAFD0;
                 return;
             default:
                 return;
@@ -573,17 +559,64 @@ void MonitorCheckpointFear1()
     {
         for(int i = 0; i < 3; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
+}
+
+void RandomizeCheckpointFear1()
+{
+    if(gvr_current_map == MAP_FORTRESS_1)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 3; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_FORTRESS_L1].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPFear1(u32 warp_ptr)
+{
+    for(int i = 0;i < 3; i++)
+    {
+        if(ap_memory.pc.worlds[AP_FORTRESS_L1].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_FORTRESS_L1_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_FORTRESS_L1_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else if(i == 2 && ap_memory.pc.items[AP_FORTRESS_L1_CHECKPOINT3] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
 }
 
 // // Switch
@@ -697,17 +730,15 @@ void MonitorEventsFear1()
                     if(!ap_memory.pc.worlds[AP_FORTRESS_L1].switch_checks[2].collected
                         && (*(u16*)door_open_offset) == 0xFF9B) // Switch not yet collected
                     {
+                        (*(u16*)door_open_offset) = 0xFFFD;
                         (*(u32*)position_addr) = 0xC55AD4D0;
                     }
                     if(!ap_memory.pc.worlds[AP_FORTRESS_L1].switch_checks[4].collected
                         && (*(u16*)door_open_offset1) == 0xFF9B) // Switch not yet collected
                     {
+                        (*(u16*)door_open_offset1) = 0xFFFD;
                         (*(u32*)position_addr) = 0xC55AE603;
                     }
-                    // if(!ap_memory.pc.worlds[AP_FORTRESS_L1].switch_checks[0].collected && (*(u16*)door_open_offset) == 0xFF9B)
-                    // {
-                    //     (*(u16*)door_open_offset) == 0xFFFE;
-                    // }
                 }
             }
             if(ap_memory.pc.worlds[AP_FORTRESS_L1].switch_checks[5].ptr != 0) // Furthest Block

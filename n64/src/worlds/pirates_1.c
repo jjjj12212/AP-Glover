@@ -668,7 +668,7 @@ void CollectedTipPirates1(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].ptr == ptr)
             {
                 ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].collected = 1;
-                ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].ptr = 0;
+                ap_memory.pc.last_tip_ptr = ptr;
             }
         }
     }
@@ -686,6 +686,40 @@ void VisitedTiphatsPirates1()
                 if(object->visited == 0 && ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].collected == 1)
                 {
                     object->visited = 1;
+                }
+            }
+        }
+    }
+}
+
+void TipTextHintPirates1(u32 orig_txt_ptr)
+{
+    if(gvr_current_map == MAP_PIRATES_1)
+    {
+        u32 copy_ptr = orig_txt_ptr;
+        for(int i = 0; i < 1; i++)
+        {
+            if(ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].ptr == ap_memory.pc.last_tip_ptr)
+            {
+                if(ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].tip_text.last_line == 0)
+                {
+                    return;
+                }
+                for(int line = 0; line < ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].tip_text.last_line; line++)
+                {
+                    u32 text_action = copy_ptr + 4;
+                    (*(u32*)copy_ptr) = (u32)&ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].tip_text.lines[line].text;
+
+                    if(line + 1 == ap_memory.pc.worlds[AP_PIRATES_L1].tip_checks[i].tip_text.last_line)
+                    {
+                        (*(u32*)text_action) = 0x00000002;
+                        return;
+                    }
+                    else
+                    {
+                        copy_ptr += 8;
+                        (*(u32*)text_action) = 0x00000000;
+                    }
                 }
             }
         }
@@ -711,14 +745,17 @@ void CheckpointPirates1(u32 ptr, u16 item_id)
             //Checkpoint 1
             case 0x28:
                 ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[0].ptr = ptr;
+                ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[0].warp_ptr = gvr_starting_checkpoint;
                 return;
             //Checkpoint 2
             case 0x5C:
                 ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[1].ptr = ptr;
+                ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[1].warp_ptr = 0x8031CBC0;
                 return;
             //Checkpoint 3
             case 0x5F:
                 ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[2].ptr = ptr;
+                ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[2].warp_ptr = 0x8031C980;
                 return;
             default:
                 return;
@@ -732,17 +769,64 @@ void MonitorCheckpointPirates1()
     {
         for(int i = 0; i < 3; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
+}
+
+void RandomizeCheckpointPirates1()
+{
+    if(gvr_current_map == MAP_PIRATES_1)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 3; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_PIRATES_L1].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPPirates1(u32 warp_ptr)
+{
+    for(int i = 0;i < 3; i++)
+    {
+        if(ap_memory.pc.worlds[AP_PIRATES_L1].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_PIRATES_L1_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_PIRATES_L1_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else if(i == 2 && ap_memory.pc.items[AP_PIRATES_L1_CHECKPOINT3] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
 }
 
 // Switch

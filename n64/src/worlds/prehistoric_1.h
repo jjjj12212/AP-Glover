@@ -16,6 +16,8 @@
     void CheckpointInitPrehistoric1();
     void CheckpointPrehistoric1(u32 ptr,  u16 item_id);
     void MonitorCheckpointPrehistoric1();
+    void RandomizeCheckpointPrehistoric1();
+    bool CheckpointAPPrehistoric1(u32 warp_ptr);
     //Enemies
     void EnemyInitPrehistoric1();
     void EnemyPrehistoric1(u32 ptr, u16 obj_type, u16 item_id);

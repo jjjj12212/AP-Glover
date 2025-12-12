@@ -66,4 +66,16 @@
 
     #define gvr_max_garibs (*(u8*)0x8029939B)
 
+    typedef void (*gvr_fnt_glover_cheat)(u8 cheat_id, u8 character);
+    #define gvr_fn_glover_cheat ((gvr_fnt_glover_cheat)0x801BB9AC)
+    //14 = frog
+    //C = camera left
+    //16 = clear
+
+    typedef void (*gvr_fnt_glover_fadein)();
+    #define gvr_fn_glover_fadein ((gvr_fnt_glover_fadein)0x8014d4d0)
+    #define gvr_fade_var (*(u16*)0x801E753C)
+
+    #define gvr_difficulty (*(u8*)0x801EAA55)
+
 #endif

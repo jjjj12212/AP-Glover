@@ -3,8 +3,6 @@
     #include "util.h"
     #include "glover/balls.h"
     #include "glover/objects.h"
-    #include "glover/dialog.h"
     #include "glover/player.h"
     #include "glover/maps.h"
-    #include "glover/items.h"
 #endif

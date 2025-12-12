@@ -24,6 +24,8 @@
     #include "worlds/space_2.h"
     #include "worlds/space_3.h"
     #include "worlds/space_bonus.h"
+    #include "worlds/training.h"
+    #include "worlds/wayroom.h"
 
     void InitLocationIds();
 #endif

@@ -18,14 +18,11 @@
     void MonitorCheckpointSpace2();
     // //Switch
     void SwitchInitSpace2();
-    // void SwitchSpace2(u32 ptr, u16 obj_type, u16 item_id);
-    // void MonitorEventsSpace2();
-    // void SwitchTreeSpace2();
-    // void PuzzleEventsSpace2(u32 ptr);
-    // u32 MonolithsSpace2(u32 ptr);
-    // void ResetMonolithsSpace2();
-    // void HitSwitchSpace2();
-    // void HitBallSwitchSpace2(u32 ptr);
+    void SwitchSpace2(u32 ptr, u16 obj_type, u16 item_id);
+    void MonitorEventsSpace2();
+    void PuzzleEventsSpace2(u32 ptr);
+    bool PuzzleConditionsSpace2(u32 ptr);
+    void HitBallSwitchSpace2(u32 ptr);
     // //Enemies
     void EnemyInitSpace2();
     void EnemySpace2(u32 ptr, u16 obj_type, u16 item_id);

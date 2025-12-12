@@ -464,11 +464,11 @@ void CheckpointAtlantis3(u32 ptr, u16 item_id)
                 return;
             case 0x41:
                 ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[1].ptr = ptr;
-                ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[1].warp_ptr = gvr_checkpoint_2;
+                ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[1].warp_ptr = 0x80321FB0;
                 return;
             case 0x48:
                 ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[2].ptr = ptr;
-                ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[2].warp_ptr = gvr_checkpoint_2;
+                ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[2].warp_ptr = 0x803210B0;
                 return;
             default:
                 return;
@@ -482,19 +482,65 @@ void MonitorCheckpointAtlantis3()
     {
         for(int i = 0; i < 3; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
 }
 
+void RandomizeCheckpointAtlantis3()
+{
+    if(gvr_current_map == MAP_ATLANTIS_3)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 3; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_ATLANTIS_L3].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPAtlantis3(u32 warp_ptr)
+{
+    for(int i = 0;i < 3; i++)
+    {
+        if(ap_memory.pc.worlds[AP_ATLANTIS_L3].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_ATLANTIS_L3_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_ATLANTIS_L3_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else if(i == 2 && ap_memory.pc.items[AP_ATLANTIS_L3_CHECKPOINT3] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
+}
 // Switch
 
 void SwitchInitAtlantis3()

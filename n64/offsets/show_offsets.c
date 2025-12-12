@@ -17,6 +17,8 @@ int main() {
 
   printf("      hub_entrance = 0x%X,\n",                      calc(mem.pc.worlds, mem.pc.worlds->hub_entrance));
   printf("      door_number = 0x%X,\n",                       calc(mem.pc.worlds, mem.pc.worlds->door));
+  printf("      warp_spawn_offset = 0x%X,\n",                 calc(mem.pc.worlds, mem.pc.worlds->warp_offset_id));
+
   printf("      garib_locations = 0x%X,\n",                   calc(mem.pc.worlds, mem.pc.worlds->garibs));
   printf("        garib_id = 0x%X,\n",                        calc(mem.pc.worlds->garibs, mem.pc.worlds->garibs->id));
   printf("        garib_collected = 0x%X,\n",                 calc(mem.pc.worlds->garibs, mem.pc.worlds->garibs->collected));
@@ -39,6 +41,15 @@ int main() {
   printf("      tip_locations = 0x%X,\n",                     calc(mem.pc.worlds, mem.pc.worlds->tip_checks));
   printf("        tip_id = 0x%X,\n",                          calc(mem.pc.worlds->tip_checks, mem.pc.worlds->tip_checks->id));
   printf("        tip_collected = 0x%X,\n",                   calc(mem.pc.worlds->tip_checks, mem.pc.worlds->tip_checks->collected));
+  printf("        tip_text = 0x%X,\n",                         calc(mem.pc.worlds->tip_checks, mem.pc.worlds->tip_checks->tip_text));
+  printf("          line1 = 0x%X,\n",                         calc(mem.pc.worlds->tip_checks->tip_text, mem.pc.worlds->tip_checks->tip_text.lines[0]));
+  printf("          line2 = 0x%X,\n",                         calc(mem.pc.worlds->tip_checks->tip_text, mem.pc.worlds->tip_checks->tip_text.lines[1]));
+  printf("          line3 = 0x%X,\n",                         calc(mem.pc.worlds->tip_checks->tip_text, mem.pc.worlds->tip_checks->tip_text.lines[2]));
+  printf("          line4 = 0x%X,\n",                         calc(mem.pc.worlds->tip_checks->tip_text, mem.pc.worlds->tip_checks->tip_text.lines[3]));
+  printf("          line5 = 0x%X,\n",                         calc(mem.pc.worlds->tip_checks->tip_text, mem.pc.worlds->tip_checks->tip_text.lines[4]));
+  printf("          line6 = 0x%X,\n",                         calc(mem.pc.worlds->tip_checks->tip_text, mem.pc.worlds->tip_checks->tip_text.lines[5]));
+  printf("         last_line = 0x%X,\n",                     calc(mem.pc.worlds->tip_checks->tip_text, mem.pc.worlds->tip_checks->tip_text.last_line));
+
   printf("      tip_size = 0x%X,\n",                          calc(mem.pc.worlds->tip_checks[0], mem.pc.worlds->tip_checks[1]));
 
   printf("      checkpoint_locations = 0x%X,\n",              calc(mem.pc.worlds, mem.pc.worlds->checkpoint_checks));
@@ -62,27 +73,38 @@ int main() {
 
   printf("    ap_hub_order = 0x%X,\n",                        calc(mem, mem.pc.hub_order));
   printf("    garib_totals = 0x%X,\n",                        calc(mem, mem.pc.garib_totals));
+  
+  printf("    wayroom_locations = 0x%X,\n",                   calc(mem.pc, mem.pc.wayroom_tip_checks));
+  printf("      wayroom_id = 0x%X,\n",                        calc(mem.pc.wayroom_tip_checks, mem.pc.wayroom_tip_checks->id));
+  printf("      wayroom_collected = 0x%X,\n",                 calc(mem.pc.wayroom_tip_checks, mem.pc.wayroom_tip_checks->collected));
+  printf("        tip_text = 0x%X,\n",                         calc(mem.pc.wayroom_tip_checks, mem.pc.wayroom_tip_checks->tip_text));
+  printf("          line1 = 0x%X,\n",                         calc(mem.pc.wayroom_tip_checks->tip_text, mem.pc.wayroom_tip_checks->tip_text.lines[0]));
+  printf("          line2 = 0x%X,\n",                         calc(mem.pc.wayroom_tip_checks->tip_text, mem.pc.wayroom_tip_checks->tip_text.lines[1]));
+  printf("          line3 = 0x%X,\n",                         calc(mem.pc.wayroom_tip_checks->tip_text, mem.pc.wayroom_tip_checks->tip_text.lines[2]));
+  printf("          line4 = 0x%X,\n",                         calc(mem.pc.wayroom_tip_checks->tip_text, mem.pc.wayroom_tip_checks->tip_text.lines[3]));
+  printf("          line5 = 0x%X,\n",                         calc(mem.pc.wayroom_tip_checks->tip_text, mem.pc.wayroom_tip_checks->tip_text.lines[4]));
+  printf("          line6 = 0x%X,\n",                         calc(mem.pc.wayroom_tip_checks->tip_text, mem.pc.wayroom_tip_checks->tip_text.lines[5]));
+  printf("         last_line = 0x%X,\n",                     calc(mem.pc.wayroom_tip_checks->tip_text, mem.pc.wayroom_tip_checks->tip_text.last_line));
+  printf("    wayroom_size = 0x%X,\n",                        calc(mem.pc.wayroom_tip_checks[0], mem.pc.wayroom_tip_checks[1]));
+  
+  printf("    chicken_collected = 0x%X,\n",                   calc(mem.pc, mem.pc.chicken));
 
   printf("    settings = 0x%X,\n",                            calc(mem, mem.pc.settings));
   printf("      garib_logic = 0x%X,\n",                       calc(mem.pc.settings, mem.pc.settings.garib_logic));
   printf("      randomize_checkpoints = 0x%X,\n",             calc(mem.pc.settings, mem.pc.settings.randomize_checkpoints));
+  printf("      checkpoint_items = 0x%X,\n",                  calc(mem.pc.settings, mem.pc.settings.checkpoint_items));
   printf("      randomize_switches = 0x%X,\n",                calc(mem.pc.settings, mem.pc.settings.randomize_switches));
   printf("      deathlink = 0x%X,\n",                         calc(mem.pc.settings, mem.pc.settings.deathlink));
   printf("      taglink = 0x%X,\n",                           calc(mem.pc.settings, mem.pc.settings.taglink));
+  printf("      tip_hints = 0x%X,\n",                         calc(mem.pc.settings, mem.pc.settings.tip_hints));
+  printf("      inverse = 0x%X,\n",                         calc(mem.pc.settings, mem.pc.settings.inverse));
   printf("    hub_map = 0x%X,\n",                             calc(mem, mem.pc.hub_map));
   printf("    world_map = 0x%X,\n",                           calc(mem, mem.pc.world_map));
-  printf("    pc_deathlink = 0x%X,\n",                        calc(mem, mem.pc.pc_deathlink));
   printf("    n64_deathlink = 0x%X,\n",                       calc(mem, mem.pc.n64_deathlink));
-  printf("    pc_taglink = 0x%X,\n",                          calc(mem, mem.pc.pc_taglink));
   printf("    n64_taglink = 0x%X,\n",                         calc(mem, mem.pc.n64_taglink));
   printf("    ROM_MAJOR_VERSION = 0x%X,\n",                   calc(mem, mem.pc.version_major));
   printf("    ROM_MINOR_VERSION = 0x%X,\n",                   calc(mem, mem.pc.version_minor));
-  printf("    ROM_PATCH_VERSION = 0x%X,\n",                   calc(mem, mem.pc.version_patch));
+  printf("    ROM_PATCH_VERSION = 0x%X,\n",                   calc(mem, mem.pc.version_patch));    
 
-  for(int i = 0;i < AP_MAX_WORLDS; i++)
-  {
-    printf("    ap_world_%d = 0x%X,\n",                       i,calc(mem, mem.pc.worlds[i]));
-    
-  }
   return 0;
 }

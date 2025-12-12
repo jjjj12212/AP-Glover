@@ -685,7 +685,7 @@ void CollectedTipCarnival2(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].ptr == ptr)
             {
                 ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].collected = 1;
-                ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].ptr = 0;
+                ap_memory.pc.last_tip_ptr = ptr;
             }
         }
     }
@@ -703,6 +703,40 @@ void VisitedTiphatsCarnival2()
                 if(object->visited == 0 && ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].collected == 1)
                 {
                     object->visited = 1;
+                }
+            }
+        }
+    }
+}
+
+void TipTextHintCarnival2(u32 orig_txt_ptr)
+{
+    if(gvr_current_map == MAP_CARNIVAL_2)
+    {
+        u32 copy_ptr = orig_txt_ptr;
+        for(int i = 0; i < 1; i++)
+        {
+            if(ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].ptr == ap_memory.pc.last_tip_ptr)
+            {
+                if(ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].tip_text.last_line == 0)
+                {
+                    return;
+                }
+                for(int line = 0; line < ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].tip_text.last_line; line++)
+                {
+                    u32 text_action = copy_ptr + 4;
+                    (*(u32*)copy_ptr) = (u32)&ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].tip_text.lines[line].text;
+
+                    if(line + 1 == ap_memory.pc.worlds[AP_CARNIVAL_L2].tip_checks[i].tip_text.last_line)
+                    {
+                        (*(u32*)text_action) = 0x00000002;
+                        return;
+                    }
+                    else
+                    {
+                        copy_ptr += 8;
+                        (*(u32*)text_action) = 0x00000000;
+                    }
                 }
             }
         }
@@ -728,25 +762,30 @@ void CheckpointCarnival2(u32 ptr, u16 item_id)
             //Checkpoint 1
             case 0x29:
                 ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[0].ptr = ptr;
+                ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[0].warp_ptr = gvr_starting_checkpoint;
                 return;
             //Checkpoint 2
             case 0x191:
                 ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[1].ptr = ptr;
+                ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[1].warp_ptr = 0x80308BF0;
                 return;
             //Checkpoint 3 & 4
             case 0x1C2:
                 if(ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[2].ptr == 0) // 3
                 {
                     ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[2].ptr = ptr;
+                    ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[2].warp_ptr = 0x80306C20;
                 }
                 else // 4
                 {
                     ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[3].ptr = ptr;
+                    ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[3].warp_ptr = 0x80306AA0;
                 }
                 return;
             //Checkpoint 5
             case 0x1E9:
                 ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[4].ptr = ptr;
+                ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[4].warp_ptr = 0x803019F0;
                 return;
 
             default:
@@ -761,17 +800,72 @@ void MonitorCheckpointCarnival2()
     {
         for(int i = 0; i < 5; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
+}
+
+void RandomizeCheckpointCarnival2()
+{
+    if(gvr_current_map == MAP_CARNIVAL_2)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 5; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_CARNIVAL_L2].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPCarnival2(u32 warp_ptr)
+{
+    for(int i = 0;i < 5; i++)
+    {
+        if(ap_memory.pc.worlds[AP_CARNIVAL_L2].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_CARNIVAL_L2_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_CARNIVAL_L2_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else if(i == 2 && ap_memory.pc.items[AP_CARNIVAL_L2_CHECKPOINT3] > 0)
+            {
+                return 0;
+            }
+            else if(i == 3 && ap_memory.pc.items[AP_CARNIVAL_L2_CHECKPOINT4] > 0)
+            {
+                return 0;
+            }
+            else if(i == 4 && ap_memory.pc.items[AP_CARNIVAL_L2_CHECKPOINT5] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
 }
 
 // Switch

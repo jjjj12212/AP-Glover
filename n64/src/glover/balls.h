@@ -28,13 +28,13 @@
 
     #define gvr_current_ball (*(u8*) 0x8029F487)
 
-    typedef void (*gvr_fnt_change_ball)(u32 ball_type, u16 power_uptimer, u8 a1, u8 a18);
+    typedef void (*gvr_fnt_change_ball)(u32 ball_type, u32 power_uptimer, u8 a1, u8 a18);
     #define gvr_fn_change_ball ((gvr_fnt_change_ball)0x8018C700)
 
-    //Messed up ball:
-    //0x80157000
-    //A0: 0x64
-    //A1: 0x80
-    //A2: 0x01
-    //A3: 0x18
+    typedef void (*gvr_fnt_change_balltype)(u32 ball_type);
+    #define gvr_fn_change_balltype ((gvr_fnt_change_balltype)0x801B3BB8)
+
+    typedef void (*gvr_fnt_curse_ball)(u32 ball_type, u16 power_uptimer, u8 a1, u8 a18);
+    #define gvr_fn_curse_ball ((gvr_fnt_curse_ball)0x801AEB0C)
+
 #endif

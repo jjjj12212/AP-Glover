@@ -16,16 +16,14 @@
     void CheckpointInitFear3();
     void CheckpointFear3(u32 ptr,  u16 item_id);
     void MonitorCheckpointFear3();
+    void RandomizeCheckpointFear3();
+    bool CheckpointAPFear3(u32 warp_ptr);
     //Switch
     void SwitchInitFear3();
-    // void SwitchFear3(u32 ptr, u16 obj_type, u16 item_id);
-    // void MonitorEventsFear3();
-    // void SwitchTreeFear3();
-    // void PuzzleEventsFear3(u32 ptr);
-    // u32 MonolithsFear3(u32 ptr);
-    // void ResetMonolithsFear3();
-    // void HitSwitchFear3();
-    // void HitBallSwitchFear3(u32 ptr);
+    void SwitchFear3(u32 ptr, u16 obj_type, u16 item_id);
+    void MonitorEventsFear3();
+    void PuzzleEventsFear3(u32 ptr);
+    void HitBallSwitchFear3(u32 ptr);
     // //Enemies
     void EnemyInitFear3();
     void EnemyFear3(u32 ptr, u16 obj_type, u16 item_id);

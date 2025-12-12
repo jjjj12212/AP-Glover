@@ -17,10 +17,13 @@
     void TipFear2(u32 ptr, u16 obj_type, u16 item_id);
     void CollectedTipFear2(u32 ptr);
     void VisitedTiphatsFear2();
+    void TipTextHintFear2(u32 orig_txt_ptr);
     // //Checkpoints
     void CheckpointInitFear2();
     void CheckpointFear2(u32 ptr,  u16 item_id);
     void MonitorCheckpointFear2();
+    void RandomizeCheckpointFear2();
+    bool CheckpointAPFear2(u32 warp_ptr);
     // //Switch
     void SwitchInitFear2();
     void SwitchFear2(u32 ptr, u16 obj_type, u16 item_id);

@@ -16,3 +16,50 @@ LD V0, 0x0050 (SP)
 SW V0, 0x0028 (SP)
 J 0x801469E4
 NOP
+
+.align 0x08
+checkpointItemPauseDisplaced:
+SD V1, 0x0010 (SP)
+SD A0, 0x0018 (SP)
+SD A1, 0x0020 (SP)
+SD A2, 0x0028 (SP)
+JAL checkpointItemPauseSelect
+NOP
+LD V1, 0x0010 (SP)
+LD A0, 0x0018 (SP)
+LD A1, 0x0020 (SP)
+LD A2, 0x0028 (SP)
+J 0x80126A40
+NOP
+
+.align 0x08
+checkpointItemPauseSelectDisplaced:
+SD V1, 0x0010 (SP)
+SD A0, 0x0018 (SP)
+SD A1, 0x0020 (SP)
+SD A2, 0x0028 (SP)
+JAL checkpointItemPauseSelect
+NOP
+LD V1, 0x0010 (SP)
+LD A0, 0x0018 (SP)
+LD A1, 0x0020 (SP)
+LD A2, 0x0028 (SP)
+J 0x80126C7C
+NOP
+
+.align 0x08
+TipTextDisplaced:
+SD A0, 0x0050 (SP)
+SD A1, 0x0058 (SP)
+SD A2, 0x0060 (SP)
+SD A3, 0x0068 (SP)
+SD V1, 0x0070 (SP)
+JAL TipText
+ADDIU A0, V0, 0x0000
+LD A0, 0x0050 (SP)
+LD A1, 0x0058 (SP)
+LD A2, 0x0060 (SP)
+LD A3, 0x0068 (SP)
+LD V1, 0x0070 (SP)
+J 0x801B86A0
+NOP

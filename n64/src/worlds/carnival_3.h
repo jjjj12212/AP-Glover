@@ -16,6 +16,8 @@
     void CheckpointInitCarnival3();
     void CheckpointCarnival3(u32 ptr,  u16 item_id);
     void MonitorCheckpointCarnival3();
+    void RandomizeCheckpointCarnival3();
+    bool CheckpointAPCarnival3(u32 warp_ptr);
     //Switch
     void SwitchInitCarnival3();
     void SwitchCarnival3(u32 ptr, u16 obj_type, u16 item_id);

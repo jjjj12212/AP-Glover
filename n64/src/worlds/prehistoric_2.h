@@ -16,6 +16,8 @@
     void CheckpointInitPrehistoric2();
     void CheckpointPrehistoric2(u32 ptr,  u16 item_id);
     void MonitorCheckpointPrehistoric2();
+    void RandomizeCheckpointPrehistoric2();
+    bool CheckpointAPPrehistoric2(u32 warp_ptr);
     //Switch
     void SwitchInitPrehistoric2();
     void SwitchPrehistoric2(u32 ptr, u16 obj_type, u16 item_id);

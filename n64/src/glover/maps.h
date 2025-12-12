@@ -7,8 +7,12 @@
         WAYROOM_PREHISTORIC_HUB = 0x09,
         WAYROOM_FORTRESS_HUB = 0x0A,
         WAYROOM_SPACE_HUB = 0x0B,
+        WAYROOM_CAVE = 0x0C,
         WAYROOM_TRAINING = 0x15
     } WAYROOMS;
+    // 0x0F = MENU
+    // 0x0E = HUB1
+    // 0x0D = HUB2
     #define gvr_wayroom_type (*(u8*)0x801E7541)
 
     typedef enum {
@@ -58,8 +62,26 @@
         MAP_WIN = 0x2F
     } MAPS;
 
-    typedef struct {
-        u8 none: 1;
+    typedef struct { 
+        u8 unused1: 1; //801EAA4C
+        u8 unused2: 1;
+        u8 spc_bonus: 1;
+        u8 spc_boss: 1;
+        u8 spc_3: 1;
+        u8 spc_2: 1;
+        u8 spc_1: 1;
+        u8 fof_bonus: 1;
+
+        u8 fof_boss: 1; //801EAA4D
+        u8 fof_3: 1;
+        u8 fof_2: 1;
+        u8 fof_1: 1;
+        u8 pre_bonus: 1;
+        u8 pre_boss: 1;
+        u8 pre_3: 1;
+        u8 pre_2: 1;
+
+        u8 pre_1: 1; //801EAA4E
         u8 pir_bonus: 1;
         u8 pir_boss: 1;
         u8 pir_3: 1;
@@ -68,7 +90,7 @@
         u8 carn_bonus: 1;
         u8 carn_boss: 1;
 
-        u8 carn_3: 1;
+        u8 carn_3: 1; //801EAA4F
         u8 carn_2: 1;
         u8 carn_1: 1;
         u8 atl_bonus: 1;
@@ -81,14 +103,14 @@
     typedef struct {
         u8 none1: 1;
         u8 none2: 1;
-        u8 none3: 1;
         u8 spc_door_bonus: 1;
         u8 spc_boss_defeated: 1;
         u8 spc_door_boss: 1;
         u8 spc_door_3: 1;
         u8 spc_door_2: 1;
-
         u8 fort_door_bonus: 1;
+
+        u8 fort_boss_defeated: 1;
         u8 fort_door_boss: 1;
         u8 fort_door_3: 1;
         u8 fort_door_2: 1;
@@ -118,7 +140,7 @@
     #define gvr_current_map (*(u8*)0x801E7531)
     #define gvr_map_transistion (*(u8*)0x801E75C4)
     #define gvr_gates (*(doors_t*)0x801EAA48)
-    #define gvr_perfect (*(perfect_t*)0x801EAA4E)
+    #define gvr_perfect (*(perfect_t*)0x801EAA4C)
     #define gvr_atlantis_bonus_completed (*(u8*)0x801E7584)
 
     #define spawn_ball_hub (*(u8*)0x801EAA56)

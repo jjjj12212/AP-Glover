@@ -16,6 +16,8 @@
     void CheckpointInitPirates2();
     void CheckpointPirates2(u32 ptr,  u16 item_id);
     void MonitorCheckpointPirates2();
+    void RandomizeCheckpointPirates2();
+    bool CheckpointAPPirates2(u32 warp_ptr);
     //Switch
     void SwitchInitPirates2();
     void SwitchPirates2(u32 ptr, u16 obj_type, u16 item_id);

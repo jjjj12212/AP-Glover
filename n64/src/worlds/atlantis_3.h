@@ -16,6 +16,7 @@
     void CheckpointInitAtlantis3();
     void CheckpointAtlantis3(u32 ptr, u16 item_id);
     void MonitorCheckpointAtlantis3();
+    bool CheckpointAPAtlantis3(u32 warp_ptr);
     //Switch
     void SwitchInitAtlantis3();
     void SwitchAtlantis3(u32 ptr, u16 obj_type, u16 item_id);
@@ -27,6 +28,7 @@
     void EnemyAtlantis3(u32 ptr, u16 obj_type, u16 item_id);
     void DefeatedEnemyAtlantis3(u32 ptr);
     void MonitorFallenEnemiesAtlantis3();
+    void RandomizeCheckpointAtlantis3();
     //Potions
     void PotionInitAtlantis3();
     void PotionAtlantis3(u32 ptr, u16 obj_type, u16 item_id);

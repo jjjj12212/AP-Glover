@@ -17,10 +17,13 @@
     void TipCarnival2(u32 ptr, u16 obj_type, u16 item_id);
     void CollectedTipCarnival2(u32 ptr);
     void VisitedTiphatsCarnival2();
+    void TipTextHintCarnival2(u32 orig_txt_ptr);
     //Checkpoints
     void CheckpointInitCarnival2();
     void CheckpointCarnival2(u32 ptr,  u16 item_id);
     void MonitorCheckpointCarnival2();
+    void RandomizeCheckpointCarnival2();
+    bool CheckpointAPCarnival2(u32 warp_ptr);
     //Switch
     void SwitchInitCarnival2();
     void SwitchCarnival2(u32 ptr, u16 obj_type, u16 item_id);

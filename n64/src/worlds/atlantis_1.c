@@ -391,7 +391,7 @@ void CollectedTipAtlantis1(u32 ptr)
             if((u32)ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].ptr == ptr)
             {
                 ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].collected = 1;
-                ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].ptr = 0;
+                ap_memory.pc.last_tip_ptr = ptr;
             }
         }
     }
@@ -409,6 +409,40 @@ void VisitedTiphatsAtlantis1()
                 if(object->visited == 0 && ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].collected == 1)
                 {
                     object->visited = 1;
+                }
+            }
+        }
+    }
+}
+
+void TipTextHintAtlantis1(u32 orig_txt_ptr)
+{
+    if(gvr_current_map == MAP_ATLANTIS_1)
+    {
+        u32 copy_ptr = orig_txt_ptr;
+        for(int i = 0; i < 5; i++)
+        {
+            if(ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].ptr == ap_memory.pc.last_tip_ptr)
+            {
+                if(ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].tip_text.last_line == 0)
+                {
+                    return;
+                }
+                for(int line = 0; line < ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].tip_text.last_line; line++)
+                {
+                    u32 text_action = copy_ptr + 4;
+                    (*(u32*)copy_ptr) = (u32)&ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].tip_text.lines[line].text;
+
+                    if(line + 1 == ap_memory.pc.worlds[AP_ATLANTIS_L1].tip_checks[i].tip_text.last_line)
+                    {
+                        (*(u32*)text_action) = 0x00000002;
+                        return;
+                    }
+                    else
+                    {
+                        copy_ptr += 8;
+                        (*(u32*)text_action) = 0x00000000;
+                    }
                 }
             }
         }
@@ -451,17 +485,60 @@ void MonitorCheckpointAtlantis1()
     {
         for(int i = 0; i < 2; i++)
         {
-            if((u32)ap_memory.pc.worlds[AP_ATLANTIS_L1].checkpoint_checks[i].ptr != 0)
+            if((u32)ap_memory.pc.worlds[AP_ATLANTIS_L1].checkpoint_checks[i].ptr != 0 && ap_memory.pc.worlds[AP_ATLANTIS_L1].checkpoint_checks[i].collected == 0)
             {
                 partial_checkpoint_obj_t* object = (partial_checkpoint_obj_t*) ap_memory.pc.worlds[AP_ATLANTIS_L1].checkpoint_checks[i].ptr;
                 if(object->visited == 0)
                 {
                     ap_memory.pc.worlds[AP_ATLANTIS_L1].checkpoint_checks[i].collected = 1;
-                    ap_memory.pc.worlds[AP_ATLANTIS_L1].checkpoint_checks[i].ptr = 0;
                 }
             }
         }
     }
+}
+
+void RandomizeCheckpointAtlantis1()
+{
+    if(gvr_current_map == MAP_ATLANTIS_1)
+    {
+        if(!ap_memory.pc.respawned && ap_memory.pc.need_respawn && gvr_loaded_timer == 0)
+        {
+            for(int i = 0;i < 2; i++)
+            {
+                if(i == ap_memory.pc.worlds[AP_ATLANTIS_L1].warp_offset_id)
+                {
+                    gvr_invuln_timer = 0;
+                    gvr_checkpoint_ptr = ap_memory.pc.worlds[AP_ATLANTIS_L1].checkpoint_checks[i].warp_ptr;
+                    ap_memory.pc.respawned = true;
+                    gvr_fn_respawn();
+                    ap_memory.pc.need_respawn = false;
+                } 
+            }
+        }
+    }
+}
+
+bool CheckpointAPAtlantis1(u32 warp_ptr)
+{
+    for(int i = 0;i < 2; i++)
+    {
+        if(ap_memory.pc.worlds[AP_ATLANTIS_L1].checkpoint_checks[i].ptr == warp_ptr)
+        {
+            if(i == 0 && ap_memory.pc.items[AP_ATLANTIS_L1_CHECKPOINT1] > 0)
+            {
+                return 0;
+            }
+            else if(i == 1 && ap_memory.pc.items[AP_ATLANTIS_L1_CHECKPOINT2] > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        } 
+    }
+    return 1;
 }
 
 // Switch
@@ -605,7 +682,7 @@ void MonitorFallenEnemiesAtlantis1()
             {
                 u32 ypos = ap_memory.pc.worlds[AP_ATLANTIS_L1].enemy_checks[3].ptr + 0x38;
                 u32 yvalue = (*(u32*)ypos);
-                if(yvalue >= 0xBF800000) //(-1 in float)
+                if(yvalue >= 0xC2480000) //(-50 in float)
                 {
                     ap_memory.pc.worlds[AP_ATLANTIS_L1].enemy_checks[3].collected = 1;
                     ap_memory.pc.worlds[AP_ATLANTIS_L1].enemy_checks[3].ptr = 0;
