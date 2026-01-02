@@ -1,5 +1,7 @@
 #include "map_handler.h"
 u8 gvr_hub = 0;
+u16 prehis_timer = 0;
+bool prehis_timer_on = false;
 
 void HubHandler()
 {
