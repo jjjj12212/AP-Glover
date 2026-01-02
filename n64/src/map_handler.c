@@ -138,15 +138,28 @@ void MapChange(u8 door_id)
                 ap_memory.pc.need_respawn = true;
                 if(gvr_current_map == MAP_PREHISTORIC_3)
                 {
-                    char *text = "---";
-                    DialogQueue(text);
-                    ap_memory.pc.send_text++;
-                    char *text1 = "D-PAD DOWN TO LOWER MONOLITH";
-                    DialogQueue(text1);
-                    ap_memory.pc.send_text++;
-                    char *text2 = "IF YOU RECEIVED THAT ITEM";
-                    DialogQueue(text2);
-                    ap_memory.pc.send_text++;
+                    if(!prehis_timer_on)
+                    {
+                        prehis_timer = 500;
+                        prehis_timer_on = true;
+                    }
+                    else
+                    {
+                        if(prehis_timer == 0)
+                        {
+                            char *text = "DPAD DOWN USES MONOLITH ITEMS";
+                            DialogQueue(text);
+                            ap_memory.pc.send_text++;
+                            prehis_timer_on = false;
+                        }
+                        else {
+                            prehis_timer--;
+                        }
+                    }
+                }
+                else
+                {
+                    prehis_timer_on = false;
                 }
                 return;
             }
