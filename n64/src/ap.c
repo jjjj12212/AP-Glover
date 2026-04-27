@@ -2097,6 +2097,10 @@ void CheckSensitiveReceivedAPItems()
                 case AP_FROG_TRAP:
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
+                        if(gvr_current_map == MAP_ATLANTIS_BONUS || gvr_current_map == MAP_CARNIVAL_BONUS || gvr_current_map == MAP_PREHISTORIC_BONUS || gvr_current_map == MAP_FORTRESS_BONUS)
+                        {
+                            break;
+                        }
                         if(!trap_active)
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
@@ -2304,12 +2308,13 @@ void CheckSensitiveReceivedAPItems()
                 case AP_CONTROL_BALL_TRAP:
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
+
                         if(!trap_active)
                         {
                             if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
                             gvr_current_map != MAP_HUB4 && gvr_current_map != MAP_HUB5 && gvr_current_map != MAP_HUB6 &&
                             gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
-                            gvr_current_map != MAP_WAYROOM)
+                            gvr_current_map != MAP_WAYROOM && gvr_current_map != MAP_PREHISTORIC_BONUS && gvr_current_map != MAP_FORTRESS_BONUS)
                             {
                                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                                 gvr_fn_glover_cheat(0x05, 1);
@@ -2335,7 +2340,7 @@ void CheckSensitiveReceivedAPItems()
                             if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
                             gvr_current_map != MAP_HUB4 && gvr_current_map != MAP_HUB5 && gvr_current_map != MAP_HUB6 &&
                             gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
-                            gvr_current_map != MAP_WAYROOM)
+                            gvr_current_map != MAP_WAYROOM && gvr_current_map != MAP_PREHISTORIC_BONUS && gvr_current_map != MAP_FORTRESS_BONUS)
                             {
                                 ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                                 trap_active = true;
@@ -2396,6 +2401,10 @@ void CheckSensitiveReceivedAPItems()
                 case AP_CURSE_BALL:
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
+                        if(gvr_current_map == MAP_FORTRESS_BONUS)
+                        {
+                            break;
+                        }
                         if(!trap_active)
                         {
                             ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
@@ -2446,6 +2455,24 @@ void CheckSensitiveReceivedAPItems()
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
                         gvr_fn_glover_cheat(0x19, 1);
+                    }
+                    break;
+                case AP_OPEN_WORLDS_X_BOSSES:
+                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    {
+                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                        gvr_gates.atl_door_2 = 1;
+                        gvr_gates.atl_door_3 = 1;
+                        gvr_gates.carn_door_2 = 1;
+                        gvr_gates.carn_door_3 = 1;
+                        gvr_gates.pir_door_2 = 1;
+                        gvr_gates.pir_door_3 = 1;
+                        gvr_gates.pre_door_2 = 1;
+                        gvr_gates.pre_door_3 = 1;
+                        gvr_gates.fort_door_2 = 1;
+                        gvr_gates.fort_door_3 = 1;
+                        gvr_gates.spc_door_2 = 1;
+                        gvr_gates.spc_door_3 = 1;
                     }
                     break;
                 case AP_ATLANTIS_DOOR1_STAR:
