@@ -1387,6 +1387,7 @@ void PlatformSwitch(u32 platform_ptr)
 }
 
 extern bool checkpointItemPauseSelectDisplaced(u32 checkpointl_ptr);
+extern bool checkpointItemPauseSelectDisplaced2(u32 checkpointl_ptr);
 extern bool checkpointItemPauseDisplaced(u32 checkpointl_ptr);
 extern u32 TipTextDisplaced(u32 orig_txt_ptr);
 extern void PlatformSwitchDisplaced(u32 platformptr);
@@ -1519,6 +1520,10 @@ u32 inject_hooks() {
     util_inject(UTIL_INJECT_FUNCTION, 0x80126C74, (u32)checkpointItemPauseSelectDisplaced, 1); //Selecting Checkpoint in pause menu
     util_inject(UTIL_INJECT_RAW, 0x80126C7C, (u32)0, 0);
     util_inject(UTIL_INJECT_RAW, 0x80126C80, (u32)0, 0);
+
+    util_inject(UTIL_INJECT_FUNCTION, 0x80126D8C, (u32)checkpointItemPauseSelectDisplaced2, 1); //Selecting Checkpoint in pause menu in Carn3
+    util_inject(UTIL_INJECT_RAW, 0x80126D94, (u32)0, 0);
+    util_inject(UTIL_INJECT_RAW, 0x80126D98, (u32)0, 0);
 
     util_inject(UTIL_INJECT_FUNCTION, 0x80126A38, (u32)checkpointItemPauseDisplaced, 1); //Pausing
     util_inject(UTIL_INJECT_RAW, 0x80126A40, (u32)0, 0);
