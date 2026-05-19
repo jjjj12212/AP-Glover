@@ -1829,20 +1829,24 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CHICKEN_SOUND:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
                     {  
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        if(ap_memory.pc.n64_items[item] % 4 == 0)
+                        SaveData(item, GetSaveData(item)+1);
+                        if(GetSaveData(item) > ap_memory.pc.items[item])
+                        {
+                            SaveData(item, ap_memory.pc.items[item]);
+                        }
+                        if(GetSaveData(item) % 4 == 0)
                         {
                             gvr_fn_sounds(0x6F, 0x0FFF, 0x80, 0x0);
                             break;
                         }
-                        else if(ap_memory.pc.n64_items[item] % 3 == 0)
+                        else if(GetSaveData(item) % 3 == 0)
                         {
                             gvr_fn_sounds(0x49, 0x0FFF, 0x80, 0x0);
                             break;
                         }
-                        else if(ap_memory.pc.n64_items[item] % 2 == 0)
+                        else if(GetSaveData(item) % 2 == 0)
                         {
                             gvr_fn_sounds(0x6E, 0x0FFF, 0x80, 0x0);
                             break;
@@ -1923,11 +1927,15 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_HERCULES_TRANSFORM:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, GetSaveData(item)+1);
+                            if(GetSaveData(item) > ap_memory.pc.items[item])
+                            {
+                                SaveData(item, ap_memory.pc.items[item]);
+                            }
                             trap_active = true;
                             if (ap_memory.pc.settings.trap_timer != 0)
                             {
@@ -1943,11 +1951,15 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_SPEED_TRANSFORM:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, GetSaveData(item)+1);
+                            if(GetSaveData(item) > ap_memory.pc.items[item])
+                            {
+                                SaveData(item, ap_memory.pc.items[item]);
+                            }
                             trap_active = true;
                             if (ap_memory.pc.settings.trap_timer != 0)
                             {
@@ -1963,11 +1975,15 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_STICKY_TRANSFORM:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, GetSaveData(item)+1);
+                            if(GetSaveData(item) > ap_memory.pc.items[item])
+                            {
+                                SaveData(item, ap_memory.pc.items[item]);
+                            }
                             trap_active = true;
                             if (ap_memory.pc.settings.trap_timer != 0)
                             {
@@ -1983,11 +1999,15 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_FROG_TRANSFORM:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, GetSaveData(item)+1);
+                            if(GetSaveData(item) > ap_memory.pc.items[item])
+                            {
+                                SaveData(item, ap_memory.pc.items[item]);
+                            }
                             trap_active = true;
                             if (ap_memory.pc.settings.trap_timer != 0)
                             {
@@ -2003,16 +2023,17 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_BOOMERANG_TRANSFORM:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
+                            
                             if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
                             gvr_current_map != MAP_HUB4 && gvr_current_map != MAP_HUB5 && gvr_current_map != MAP_HUB6 &&
                             gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
                             gvr_current_map != MAP_WAYROOM)
                             {
-                                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                                SaveData(item, ap_memory.pc.items[item]);
                                 trap_active = true;
                                 if (ap_memory.pc.settings.trap_timer != 0)
                                 {
@@ -2029,7 +2050,7 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_BEACHBALL_TRANSFORM:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
                     {
                         if(!trap_active)
                         {
@@ -2038,7 +2059,11 @@ void CheckSensitiveReceivedAPItems()
                             gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
                             gvr_current_map != MAP_WAYROOM)
                             {
-                                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                                SaveData(item, GetSaveData(item)+1);
+                                if(GetSaveData(item) > ap_memory.pc.items[item])
+                                {
+                                    SaveData(item, ap_memory.pc.items[item]);
+                                }
                                 trap_active = true;
                                 if (ap_memory.pc.settings.trap_timer != 0)
                                 {
@@ -2055,11 +2080,15 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_HELICOPTER_TRANSFORM:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
                     {
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, GetSaveData(item)+1);
+                            if(GetSaveData(item) > ap_memory.pc.items[item])
+                            {
+                                SaveData(item, ap_memory.pc.items[item]);
+                            }
                             trap_active = true;
                             if (ap_memory.pc.settings.trap_timer != 0)
                             {
@@ -2075,11 +2104,15 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_DEATH_TRANSFORM:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
                     {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, GetSaveData(item)+1);
+                            if(GetSaveData(item) > ap_memory.pc.items[item])
+                            {
+                                SaveData(item, ap_memory.pc.items[item]);
+                            }
                             trap_active = true;
                             if (ap_memory.pc.settings.trap_timer != 0)
                             {
@@ -2095,15 +2128,15 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_FROG_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {     
                         if(gvr_current_map == MAP_ATLANTIS_BONUS || gvr_current_map == MAP_CARNIVAL_BONUS || gvr_current_map == MAP_PREHISTORIC_BONUS || gvr_current_map == MAP_FORTRESS_BONUS)
                         {
                             break;
                         }
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, ap_memory.pc.items[item]);
                             gvr_fn_glover_cheat(0x14, 1);
                             trap_active = true;
                             is_cheat = true;
@@ -2119,9 +2152,13 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CAMERA_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
+                        SaveData(item, GetSaveData(item)+1);
+                        if(GetSaveData(item) > ap_memory.pc.items[item])
+                        {
+                            SaveData(item, ap_memory.pc.items[item]);
+                        }
                         gvr_fn_glover_cheat(0x0C, 1);
                         trap_active = true;
                         is_cheat = true;
@@ -2136,9 +2173,13 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CAMERA_90_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
+                        SaveData(item, GetSaveData(item)+1);
+                        if(GetSaveData(item) > ap_memory.pc.items[item])
+                        {
+                            SaveData(item, ap_memory.pc.items[item]);
+                        }
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
                         trap_active = true;
@@ -2154,9 +2195,9 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CAMERA_135_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
+                        SaveData(item, ap_memory.pc.items[item]);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
@@ -2173,9 +2214,9 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CAMERA_180_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
+                        SaveData(item, ap_memory.pc.items[item]);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
@@ -2193,9 +2234,9 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CAMERA_225_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
+                        SaveData(item, ap_memory.pc.items[item]);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
@@ -2214,9 +2255,9 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CAMERA_270_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
+                        SaveData(item, ap_memory.pc.items[item]);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
@@ -2236,9 +2277,9 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CAMERA_315_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
+                        SaveData(item, ap_memory.pc.items[item]);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
                         gvr_fn_glover_cheat(0x0C, 1);
@@ -2259,18 +2300,22 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_MAD_GARIBS:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-                        ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
+                        SaveData(item, GetSaveData(item)+1);
+                        if(GetSaveData(item) > ap_memory.pc.items[item])
+                        {
+                            SaveData(item, ap_memory.pc.items[item]);
+                        }
                         gvr_fn_glover_cheat(0x0D, 1);
                     }
                     break;
                 case AP_FISH_EYE_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, ap_memory.pc.items[item]);
                             gvr_fn_glover_cheat(0x0A, 1);
                             trap_active = true;
                             is_cheat = true;
@@ -2286,11 +2331,11 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_ENEMY_BALL_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, ap_memory.pc.items[item]);
                             gvr_fn_glover_cheat(0x07, 1);
                             trap_active = true;
                             is_cheat = true;
@@ -2306,9 +2351,8 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CONTROL_BALL_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
-
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
                             if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
@@ -2316,7 +2360,7 @@ void CheckSensitiveReceivedAPItems()
                             gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
                             gvr_current_map != MAP_WAYROOM && gvr_current_map != MAP_PREHISTORIC_BONUS && gvr_current_map != MAP_FORTRESS_BONUS)
                             {
-                                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                                SaveData(item, ap_memory.pc.items[item]);
                                 gvr_fn_glover_cheat(0x05, 1);
                                 trap_active = true;
                                 is_cheat = true;
@@ -2333,8 +2377,8 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_INVIS_BALL_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
                             if(gvr_current_map != MAP_HUB1 && gvr_current_map != MAP_HUB2 && gvr_current_map != MAP_HUB3 &&
@@ -2342,7 +2386,7 @@ void CheckSensitiveReceivedAPItems()
                             gvr_current_map != MAP_HUB7 && gvr_current_map != MAP_HUB8 && gvr_current_map != MAP_CASTLE_CAVE &&
                             gvr_current_map != MAP_WAYROOM && gvr_current_map != MAP_PREHISTORIC_BONUS && gvr_current_map != MAP_FORTRESS_BONUS)
                             {
-                                ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                                SaveData(item, ap_memory.pc.items[item]);
                                 trap_active = true;
                                 if (ap_memory.pc.settings.trap_timer != 0)
                                 {
@@ -2359,11 +2403,11 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_BIG_BALL:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, ap_memory.pc.items[item]);
                             gvr_fn_glover_cheat(0x09, 1);
                             trap_active = true;
                             is_cheat = true;
@@ -2379,11 +2423,11 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_LOW_GRAV:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, ap_memory.pc.items[item]);
                             gvr_fn_glover_cheat(0x08, 1);
                             trap_active = true;
                             is_cheat = true;
@@ -2399,7 +2443,7 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CURSE_BALL:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
                     {
                         if(gvr_current_map == MAP_FORTRESS_BONUS)
                         {
@@ -2407,7 +2451,7 @@ void CheckSensitiveReceivedAPItems()
                         }
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, ap_memory.pc.items[item]);
                             gvr_fn_curse_ball(0x1F4, 0x80, 0x01, 0x18);   
                             trap_active = true;
                             if (ap_memory.pc.settings.trap_timer != 0)
@@ -2422,11 +2466,15 @@ void CheckSensitiveReceivedAPItems()
                     }
                     break;
                 case AP_CBALL_TRAP:
-                    if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
-                    {
+                    if(ap_memory.pc.items[item] != GetSaveData(item))
+                    {  
                         if(!trap_active)
                         {
-                            ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
+                            SaveData(item, GetSaveData(item)+1);
+                            if(GetSaveData(item) > ap_memory.pc.items[item])
+                            {
+                                SaveData(item, ap_memory.pc.items[item]);
+                            }
                             gvr_fn_change_ball(TRANSFORM_CRYSTAL_BALL, 0x80, 0x1, 0x18);
                             char *text = "YOU RECEIVED CRYSTAL B TRAP";
                             DialogQueue(text);
@@ -2461,25 +2509,30 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.atl_door_2 = 1;
-                        gvr_gates.atl_door_3 = 1;
-                        gvr_gates.carn_door_2 = 1;
-                        gvr_gates.carn_door_3 = 1;
-                        gvr_gates.pir_door_2 = 1;
-                        gvr_gates.pir_door_3 = 1;
-                        gvr_gates.pre_door_2 = 1;
-                        gvr_gates.pre_door_3 = 1;
-                        gvr_gates.fort_door_2 = 1;
-                        gvr_gates.fort_door_3 = 1;
-                        gvr_gates.spc_door_2 = 1;
-                        gvr_gates.spc_door_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_3 = 1;
+
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_3 = 1;
+
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_3 = 1;
+
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_3 = 1;
+
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_3 = 1;
+
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_3 = 1;
                     }
                     break;
                 case AP_ATLANTIS_DOOR1_STAR:
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.atl_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.atl_1 = 1;
                         char *text = "YOU RECEIVED ATLS-1 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++;  
@@ -2489,7 +2542,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.atl_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
                         char *text = "YOU RECEIVED ATLS-2 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2499,7 +2552,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.atl_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.atl_3 = 1;
                         char *text = "YOU RECEIVED ATLS-3 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2509,7 +2562,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.atl_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_boss_defeated = 1;
                         char *text = "YOU RECEIVED ATLS-4 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2519,7 +2572,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.atl_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.atl_bonus = 1;
                         char *text = "YOU RECEIVED ATLS-5 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2529,7 +2582,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.carn_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.carn_1 = 1;
                         char *text = "YOU RECEIVED CARN-1 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++;  
@@ -2539,7 +2592,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.carn_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.carn_2 = 1;
                         char *text = "YOU RECEIVED CARN-2 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2549,7 +2602,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.carn_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.carn_3 = 1;
                         char *text = "YOU RECEIVED CARN-3 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2559,7 +2612,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.carn_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_boss_defeated = 1;
                         char *text = "YOU RECEIVED CARN-4 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2569,7 +2622,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.carn_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.carn_bonus = 1;
                         char *text = "YOU RECEIVED CARN-5 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2579,7 +2632,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.pir_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pir_1 = 1;
                         char *text = "YOU RECEIVED PIRATES-1 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++;  
@@ -2589,7 +2642,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.pir_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pir_2 = 1;
                         char *text = "YOU RECEIVED PIRATES-2 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2599,7 +2652,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.pir_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pir_3 = 1;
                         char *text = "YOU RECEIVED PIRATES-3 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2609,7 +2662,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pir_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_boss_defeated = 1;
                         char *text = "YOU GOT PIRATES-4 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2619,7 +2672,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.pir_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pir_bonus = 1;
                         char *text = "YOU GOT PIRATES-5 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2629,7 +2682,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.pre_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pre_1 = 1;
                         char *text = "YOU RECEIVED PREHIST-1 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++;  
@@ -2639,7 +2692,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.pre_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pre_2 = 1;
                         char *text = "YOU RECEIVED PREHIST-2 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2649,7 +2702,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.pre_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pre_3 = 1;
                         char *text = "YOU RECEIVED PREHIST-3 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2659,7 +2712,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pre_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_boss_defeated = 1;
                         char *text = "YOU GOT PREHIST-4 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2669,7 +2722,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.pre_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pre_bonus = 1;
                         char *text = "YOU GOT PREHIST-5 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2679,7 +2732,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.fof_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.fof_1 = 1;
                         char *text = "YOU RECEIVED FEAR-1 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++;  
@@ -2689,7 +2742,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.fof_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.fof_2 = 1;
                         char *text = "YOU RECEIVED FEAR-2 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2699,7 +2752,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.fof_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.fof_3 = 1;
                         char *text = "YOU RECEIVED FEAR-3 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2709,7 +2762,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.fort_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_boss_defeated = 1;
                         char *text = "YOU RECEIVED FEAR-4 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2719,7 +2772,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.fof_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.fof_bonus = 1;
                         char *text = "YOU RECEIVED FEAR-5 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2729,7 +2782,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.spc_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.spc_1 = 1;
                         char *text = "YOU RECEIVED SPACE-1 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++;  
@@ -2739,7 +2792,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.spc_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.spc_2 = 1;
                         char *text = "YOU RECEIVED SPACE-2 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2749,7 +2802,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.spc_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.spc_3 = 1;
                         char *text = "YOU RECEIVED SPACE-3 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2759,7 +2812,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.spc_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_boss_defeated = 1;
                         char *text = "YOU RECEIVED SPACE-4 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2769,7 +2822,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_perfect.spc_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.spc_bonus = 1;
                         char *text = "YOU RECEIVED SPACE-5 HUB STAR";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2779,7 +2832,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.atl_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_2 = 1;
                         char *text = "ATLS-2 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2789,7 +2842,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.atl_door_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_3 = 1;
                         char *text = "ATLS-3 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2799,7 +2852,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.atl_door_boss = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
                         char *text = "ATLS-BOSS HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2809,7 +2862,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.atl_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_bonus = 1;
                         char *text = "ATLS-BONUS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2819,7 +2872,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.carn_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_2 = 1;
                         char *text = "CARN-2 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2829,7 +2882,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.carn_door_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_3 = 1;
                         char *text = "CARN-3 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2839,7 +2892,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.carn_door_boss = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
                         char *text = "CARN-BOSS HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2849,7 +2902,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.carn_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_bonus = 1;
                         char *text = "CARN-BONUS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2859,7 +2912,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pir_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_2 = 1;
                         char *text = "PIRATES-2 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2869,7 +2922,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pir_door_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_3 = 1;
                         char *text = "PIRATES-3 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2879,7 +2932,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pir_door_boss = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
                         char *text = "PIRATES-BOSS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2889,7 +2942,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pir_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_bonus = 1;
                         char *text = "PIRATES-BONUS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2899,7 +2952,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pre_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_2 = 1;
                         char *text = "PREHIST-2 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2909,7 +2962,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pre_door_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_3 = 1;
                         char *text = "PREHIST-3 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2919,7 +2972,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pre_door_boss = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
                         char *text = "PREHIST-BOSS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2929,7 +2982,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.pre_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_bonus = 1;
                         char *text = "PREHIST-BONUS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2939,7 +2992,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.fort_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_2 = 1;
                         char *text = "FEAR-2 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2949,7 +3002,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.fort_door_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_3 = 1;
                         char *text = "FEAR-3 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2959,7 +3012,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.fort_door_boss = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
                         char *text = "FEAR-BOSS HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2969,7 +3022,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.fort_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_bonus = 1;
                         char *text = "FEAR-BONUS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2979,7 +3032,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.spc_door_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_2 = 1;
                         char *text = "SPACE-2 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2989,7 +3042,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.spc_door_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_3 = 1;
                         char *text = "SPACE-3 HUB GATE IS NOW OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -2999,7 +3052,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.spc_door_boss = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
                         char *text = "SPACE-BOSS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -3009,7 +3062,7 @@ void CheckSensitiveReceivedAPItems()
                     if(ap_memory.pc.items[item] != ap_memory.pc.n64_items[item])
                     {
                         ap_memory.pc.n64_items[item] = ap_memory.pc.items[item];
-                        gvr_gates.spc_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_bonus = 1;
                         char *text = "SPACE-BONUS HUB GATE IS OPEN";
                         DialogQueue(text);
                         ap_memory.pc.send_text++; 
@@ -3273,45 +3326,82 @@ void Goal()
         {
             case 1:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.atl_door_2 = 1;  
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_2 = 1;  
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.atl_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.atl_1 = 1;  
                     }
                 }
                 break;
             case 2:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.atl_door_3 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_3 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.atl_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;  
                     }
                 }
                 break;
             case 3:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.atl_door_boss = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;  
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.atl_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.atl_3 = 1;  
                     }
                 }
                 break;
             case 4:
-                if(!ap_memory.pc.worlds[level].goal)
+                if(!ap_memory.pc.worlds[level].goal && !gvr_save.ap_save_data.goals[GetCurrentSave()].atl_boss_goal)
                 {
                     gvr_wayroom_type = 0x0D;
-                    spawn_ball_hub+=1;
+                    gvr_save.savefile[GetCurrentSave()].spawn_ball+=1;
+                    gvr_save.ap_save_data.goals[GetCurrentSave()].atl_boss_goal = 1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
                 if(ap_memory.pc.settings.portals == 0)
@@ -3319,7 +3409,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_gates.atl_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_boss_defeated = 1;
                     }
                 }
                 break;
@@ -3330,7 +3420,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.atl_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.atl_bonus = 1; 
                     }
                 }
                 break;
@@ -3343,45 +3433,82 @@ void Goal()
         {
             case 1:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.carn_door_2 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_2 = 1;  
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.carn_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.carn_1 = 1;  
                     }
                 }
                 break;
             case 2:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.carn_door_3 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_3 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.carn_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.carn_2 = 1;
                     }
                 }
                 break;
             case 3:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.carn_door_boss = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.carn_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.carn_3 = 1;
                     }
                 }
                 break;
             case 4:
-                if(!ap_memory.pc.worlds[level].goal)
+                if(!ap_memory.pc.worlds[level].goal && !gvr_save.ap_save_data.goals[GetCurrentSave()].carn_boss_goal)
                 {
                     gvr_wayroom_type = 0x0D;
-                    spawn_ball_hub+=1;
+                    gvr_save.savefile[GetCurrentSave()].spawn_ball+=1;
+                    gvr_save.ap_save_data.goals[GetCurrentSave()].carn_boss_goal = 1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
                 if(ap_memory.pc.settings.portals == 0)
@@ -3389,7 +3516,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_gates.carn_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_boss_defeated = 1;
                     }
                 }
                 break;
@@ -3400,7 +3527,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.carn_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.carn_bonus = 1;
                     }
                 }
                 break;
@@ -3413,45 +3540,82 @@ void Goal()
         {
             case 1:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.pir_door_2 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_2 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.pir_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pir_1 = 1;
                     }
                 }
                 break;
             case 2:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.pir_door_3 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_3 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.pir_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pir_2 = 1;
                     }
                 }
                 break;
             case 3:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.pir_door_boss = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.pir_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pir_3 = 1;
                     }
                 }
                 break;
             case 4:
-                if(!ap_memory.pc.worlds[level].goal)
+                if(!ap_memory.pc.worlds[level].goal && !gvr_save.ap_save_data.goals[GetCurrentSave()].pir_boss_goal)
                 {
                     gvr_wayroom_type = 0x0D;
-                    spawn_ball_hub+=1;
+                    gvr_save.savefile[GetCurrentSave()].spawn_ball+=1;
+                    gvr_save.ap_save_data.goals[GetCurrentSave()].pir_boss_goal = 1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
                 if(ap_memory.pc.settings.portals == 0)
@@ -3459,7 +3623,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_gates.pir_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_boss_defeated = 1;
                     }
                 }
                 break;
@@ -3470,7 +3634,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.pir_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pir_bonus = 1;
                     }
                 }
                 break;
@@ -3483,45 +3647,82 @@ void Goal()
         {
             case 1:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.pre_door_2 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_2 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.pre_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pre_1 = 1;
                     }
                 }
                 break;
             case 2:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.pre_door_3 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_3 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.pre_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pre_2 = 1;
                     }
                 }
                 break;
             case 3:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.pre_door_boss = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.pre_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pre_3 = 1;
                     }
                 }
                 break;
             case 4:
-                if(!ap_memory.pc.worlds[level].goal)
+                if(!ap_memory.pc.worlds[level].goal && !gvr_save.ap_save_data.goals[GetCurrentSave()].pre_boss_goal)
                 {
                     gvr_wayroom_type = 0x0D;
-                    spawn_ball_hub+=1;
+                    gvr_save.savefile[GetCurrentSave()].spawn_ball+=1;
+                    gvr_save.ap_save_data.goals[GetCurrentSave()].pre_boss_goal = 1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
                 if(ap_memory.pc.settings.portals == 0)
@@ -3529,7 +3730,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_gates.pre_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_boss_defeated = 1;
                     }
                 }
                 break;
@@ -3540,7 +3741,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.pre_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.pre_bonus = 1;
                     }
                 }
                 break;
@@ -3552,46 +3753,82 @@ void Goal()
         switch(ap_memory.pc.worlds[level].door)
         {
             case 1:
-                ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.fort_door_2 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_2 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.fof_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.fof_1 = 1;
                     }
                 }
                 break;
             case 2:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.fort_door_3 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_3 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.fof_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.fof_2 = 1;
                     }
                 }
                 break;
             case 3:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.fort_door_boss = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.fof_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.fof_3 = 1;
                     }
                 }
                 break;
             case 4:
-                if(!ap_memory.pc.worlds[level].goal)
+                if(!ap_memory.pc.worlds[level].goal && !gvr_save.ap_save_data.goals[GetCurrentSave()].fort_boss_goal)
                 {
                     gvr_wayroom_type = 0x0D;
-                    spawn_ball_hub+=1;
+                    gvr_save.savefile[GetCurrentSave()].spawn_ball+=1;
+                    gvr_save.ap_save_data.goals[GetCurrentSave()].fort_boss_goal = 1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
                 if(ap_memory.pc.settings.portals == 0)
@@ -3599,7 +3836,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_gates.fort_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_boss_defeated = 1;
                     }
                 }
                 break;
@@ -3610,7 +3847,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.fof_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.fof_bonus = 1;
                     }
                 }
                 break;
@@ -3623,45 +3860,82 @@ void Goal()
         {
             case 1:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.spc_door_2 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_2 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.spc_1 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.spc_1 = 1;
                     }
                 }
                 break;
             case 2:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.spc_door_3 = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_3 = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.spc_2 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.spc_2 = 1;
                     }
                 }
                 break;
             case 3:
                 ap_memory.pc.worlds[level].goal = 1;
+                gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3 = 1;
                 if(ap_memory.pc.settings.portals == 0)
                 {
-                    gvr_gates.spc_door_boss = 1;
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3)
+                        {
+                            gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                        }
+                    }
+                    else
+                    {
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.spc_3 = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.spc_3 = 1;
                     }
                 }
                 break;
             case 4:
-                if(!ap_memory.pc.worlds[level].goal)
+                if(!ap_memory.pc.worlds[level].goal && !gvr_save.ap_save_data.goals[GetCurrentSave()].spc_boss_goal)
                 {
                     gvr_wayroom_type = 0x0D;
-                    spawn_ball_hub+=1;
+                    gvr_save.savefile[GetCurrentSave()].spawn_ball+=1;
+                    gvr_save.ap_save_data.goals[GetCurrentSave()].spc_boss_goal = 1;
                 }
                 ap_memory.pc.worlds[level].goal = 1;
                 if(ap_memory.pc.settings.portals == 0)
@@ -3669,7 +3943,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_gates.spc_boss_defeated = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_boss_defeated = 1;
                     }
                 }
                 break;
@@ -3680,7 +3954,7 @@ void Goal()
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
-                        gvr_perfect.spc_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].star_worlds.spc_bonus = 1;
                     }
                 }
                 break;
@@ -3726,19 +4000,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.atl_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.atl_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.atl_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.atl_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.atl_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.atl_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3748,19 +4022,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.carn_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.carn_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.carn_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.carn_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.carn_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.carn_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.carn_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.carn_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.carn_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.carn_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3770,19 +4044,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.pir_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pir_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.pir_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pir_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.pir_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pir_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.pir_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.pir_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.pir_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pir_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3792,19 +4066,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.pre_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pre_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.pre_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pre_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.pre_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pre_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.pre_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.pre_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.pre_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pre_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3814,19 +4088,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.fof_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.fof_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.fof_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.fof_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.fof_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.fof_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.fort_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.fort_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.fof_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.fof_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3836,19 +4110,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.spc_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.spc_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.spc_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.spc_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.spc_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.spc_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.spc_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.spc_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.spc_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.spc_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3870,19 +4144,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.atl_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.atl_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.atl_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.atl_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.atl_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.atl_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3892,19 +4166,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.carn_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.carn_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.carn_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.carn_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.carn_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.carn_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.carn_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.carn_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.carn_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.carn_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3914,19 +4188,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.pir_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pir_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.pir_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pir_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.pir_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pir_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.pir_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.pir_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.pir_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pir_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3936,19 +4210,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.pre_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pre_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.pre_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pre_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.pre_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pre_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.pre_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.pre_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.pre_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.pre_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3958,19 +4232,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.fof_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.fof_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.fof_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.fof_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.fof_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.fof_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.fort_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.fort_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.fof_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.fof_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -3980,19 +4254,19 @@ void UnlockStarWorld()
                             switch(ap_memory.pc.worlds[level].door)
                             {
                                 case 1:
-                                    gvr_perfect.spc_1 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.spc_1 = 1;
                                     break;
                                 case 2:
-                                    gvr_perfect.spc_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.spc_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_perfect.spc_3 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.spc_3 = 1;
                                     break;
                                 case 4:
-                                    gvr_gates.spc_boss_defeated = 1;
+                                    gvr_save.savefile[GetCurrentSave()].gates.spc_boss_defeated = 1;
                                     break;
                                 case 5:
-                                    gvr_perfect.spc_bonus = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.spc_bonus = 1;
                                     break;
                                 default:
                                     break;
@@ -4037,42 +4311,42 @@ void UnlockSecret()
                 case 1:
                     if(ap_memory.pc.settings.portals == 0)
                     {
-                        gvr_gates.atl_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.atl_door_bonus = 1;
                     }
                     ap_memory.pc.secret_unlock[hub] = 1;
                     break;
                 case 2:
                     if(ap_memory.pc.settings.portals == 0)
                     {
-                        gvr_gates.carn_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.carn_door_bonus = 1;
                     }
                     ap_memory.pc.secret_unlock[hub] = 1;
                     break;
                 case 3:
                     if(ap_memory.pc.settings.portals == 0)
                     {
-                        gvr_gates.pir_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pir_door_bonus = 1;
                     }
                     ap_memory.pc.secret_unlock[hub] = 1;
                     break;
                 case 4:
                     if(ap_memory.pc.settings.portals == 0)
                     {
-                        gvr_gates.pre_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.pre_door_bonus = 1;
                     }
                     ap_memory.pc.secret_unlock[hub] = 1;
                     break;
                 case 5:
                     if(ap_memory.pc.settings.portals == 0)
                     {
-                        gvr_gates.fort_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.fort_door_bonus = 1;
                     }
                     ap_memory.pc.secret_unlock[hub] = 1;
                     break;
                 case 6:
                     if(ap_memory.pc.settings.portals == 0)
                     {
-                        gvr_gates.spc_door_bonus = 1;
+                        gvr_save.savefile[GetCurrentSave()].gates.spc_door_bonus = 1;
                     }
                     ap_memory.pc.secret_unlock[hub] = 1;
                     break;

@@ -29,6 +29,21 @@ J 0x80400284
 ;B 0x0D3380
 ;;EO while Object
 
+;;Ability to inject for checkpoint items
+;orga 0x027C84
+;NOP
+;.incbin romfile, 0x027C84, 0x8
+;.orga 0x0D36E8
+;B 0x0D3380
+;;EO while Object
+
+;;Ability to inject for checkpoint items 2 (fix for Carn3)
+;orga 0x027D9C
+;NOP
+;.incbin romfile, 0x027D9C, 0x8
+;.orga 0x0D36E8
+;B 0x0D3380
+;;EO while Object
 
 
 .headersize (0x80400000 - 0x800000)
@@ -54,6 +69,7 @@ PAYLOAD_START:
 .align 0x10
 .importobj srcbundle
 .include "glover_awful_display.asm"
+;.include "glover_checkpoints.asm"
 
 
 PAYLOAD_END:

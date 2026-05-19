@@ -188,10 +188,10 @@ void BacktoHub()
         gvr_wayroom_type = APHubConverter(ap_memory.pc.worlds[ap_memory.pc.current_world_key].hub_entrance);
         gvr_max_garibs = 0x0;
     }
-    if(gvr_current_map == MAP_HUB1 && spawn_ball_hub == 0) //Skip Intro
+    if(gvr_current_map == MAP_HUB1 && gvr_save.savefile[GetCurrentSave()].spawn_ball == 0) //Skip Intro
     {
         gvr_current_map = MAP_HUB2;
-        spawn_ball_hub += 1;
+        gvr_save.savefile[GetCurrentSave()].spawn_ball+=1;
     }
     else if (gvr_current_map == MAP_HUB1)
     {

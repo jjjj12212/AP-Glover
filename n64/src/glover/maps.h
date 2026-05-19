@@ -62,88 +62,9 @@
         MAP_WIN = 0x2F
     } MAPS;
 
-    typedef struct { 
-        u8 unused1: 1; //801EAA4C
-        u8 unused2: 1;
-        u8 spc_bonus: 1;
-        u8 spc_boss: 1;
-        u8 spc_3: 1;
-        u8 spc_2: 1;
-        u8 spc_1: 1;
-        u8 fof_bonus: 1;
 
-        u8 fof_boss: 1; //801EAA4D
-        u8 fof_3: 1;
-        u8 fof_2: 1;
-        u8 fof_1: 1;
-        u8 pre_bonus: 1;
-        u8 pre_boss: 1;
-        u8 pre_3: 1;
-        u8 pre_2: 1;
-
-        u8 pre_1: 1; //801EAA4E
-        u8 pir_bonus: 1;
-        u8 pir_boss: 1;
-        u8 pir_3: 1;
-        u8 pir_2: 1;
-        u8 pir_1: 1;
-        u8 carn_bonus: 1;
-        u8 carn_boss: 1;
-
-        u8 carn_3: 1; //801EAA4F
-        u8 carn_2: 1;
-        u8 carn_1: 1;
-        u8 atl_bonus: 1;
-        u8 atl_boss: 1;
-        u8 atl_3: 1;
-        u8 atl_2: 1;
-        u8 atl_1: 1;
-    } perfect_t;
-
-    typedef struct {
-        u8 none1: 1;
-        u8 none2: 1;
-        u8 spc_door_bonus: 1;
-        u8 spc_boss_defeated: 1;
-        u8 spc_door_boss: 1;
-        u8 spc_door_3: 1;
-        u8 spc_door_2: 1;
-        u8 fort_door_bonus: 1;
-
-        u8 fort_boss_defeated: 1;
-        u8 fort_door_boss: 1;
-        u8 fort_door_3: 1;
-        u8 fort_door_2: 1;
-        u8 pre_door_bonus: 1;
-        u8 pre_boss_defeated: 1;
-        u8 pre_door_boss: 1;
-        u8 pre_door_3: 1;
-
-        u8 pre_door_2: 1;
-        u8 pir_door_bonus: 1;
-        u8 pir_boss_defeated: 1;
-        u8 pir_door_boss: 1;
-        u8 pir_door_3: 1;
-        u8 pir_door_2: 1;
-        u8 carn_door_bonus: 1;
-        u8 carn_boss_defeated: 1;
-
-        u8 carn_door_boss: 1;
-        u8 carn_door_3: 1;
-        u8 carn_door_2: 1;
-        u8 atl_door_bonus: 1;
-        u8 atl_boss_defeated: 1;
-        u8 atl_door_boss: 1;
-        u8 atl_door_3: 1;
-        u8 atl_door_2: 1;
-    } doors_t;
     #define gvr_current_map (*(u8*)0x801E7531)
     #define gvr_prev_map (*(u8*)0x801E7532)
     #define gvr_map_transistion (*(u8*)0x801E75C4)
-    #define gvr_gates (*(doors_t*)0x801EAA48)
-    #define gvr_perfect (*(perfect_t*)0x801EAA4C)
     #define gvr_atlantis_bonus_completed (*(u8*)0x801E7584)
-
-    #define spawn_ball_hub (*(u8*)0x801EAA56)
-
 #endif

@@ -5,4 +5,5 @@
     #include "glover/objects.h"
     #include "glover/player.h"
     #include "glover/maps.h"
+    #include "glover/save.h"
 #endif

@@ -77,6 +77,5 @@
     #define gvr_fn_glover_fadein ((gvr_fnt_glover_fadein)0x8014d4d0)
     #define gvr_fade_var (*(u16*)0x801E753C)
     #define gvr_fade_var_transition (*(u8*)0x801E753E)
-    #define gvr_difficulty (*(u8*)0x801EAA55)
 
 #endif

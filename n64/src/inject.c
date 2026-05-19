@@ -7,6 +7,7 @@
 #include "tools.h"
 #include "sfx.h"
 #include "portal_doors.h"
+#include "save_data.h"
 
 bool init = false;
 bool gotdjump = false;
@@ -18,9 +19,12 @@ bool inversed = false;
 void watch_controls()
 {
   if(gvr_controls.DPAD_L && !dpad_pressed) {
+    //ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES] = 1;
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_R && !dpad_pressed) {
+    //ap_memory.pc.items[AP_CARNIVAL_L3_CHECKPOINT2] = 1;
+    //ap_memory.pc.items[AP_HELICOPTER_TRANSFORM]++;
     if(ap_memory.pc.items[AP_DEBUG])
     {
       ap_memory.pc.items[AP_HELICOPTER_TRANSFORM]++;
@@ -28,6 +32,7 @@ void watch_controls()
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_U && !dpad_pressed) {
+    //ap_memory.pc.items[AP_CARNIVAL_L3_CHECKPOINT1] = 1;
     dpad_pressed = true;
   }
   else if(gvr_controls.DPAD_D && !dpad_pressed) {
@@ -79,19 +84,22 @@ void pre_loop()
     //ap_memory.pc.settings.randomize_switches = true;
     //ap_memory.pc.settings.randomize_checkpoints = true;
     //ap_memory.pc.settings.checkpoint_items = true;
-    
     init = true;
+  }
+  if(gvr_current_map == 0x2C) //Menu Select
+  {
+    (*(u16*)0x801F66AE) = 0x0000; //Remove UI
+    (*(u16*)0x801F6722) = 0x0000; //Remove UI
+    (*(u16*)0x801F6796) = 0x0000; //Remove UI
+    (*(u16*)0x801F680A) = 0x0000; //Remove UI
   }
 
   if(gvr_fade_var == 0 && gvr_loaded_timer > 0 && gvr_bosscutscene == 0)
   {
     if(gvr_current_map != 0xFF && gvr_current_map != 0x2B && gvr_current_map != 0x2C)
     {
-      if (gvr_current_map != 0x0A && gvr_prev_map != 0xFF)
-      {
         CheckSensitiveReceivedAPItems();
         TrapTimer();
-      }
     }
   }
   CheckReceivedAPItems();
@@ -124,14 +132,14 @@ void pre_loop()
   {
     if(animation_ptr != 0 && animation_ptr->animations != 0)
     {
-      if(animation_ptr->animations->current_animation == 0x14 && gvr_difficulty == 0x01 && gvr_fade_var == 0)
+      if(animation_ptr->animations->current_animation == 0x14 && GetDifficulty() == 0x01 && gvr_fade_var == 0)
       {
-        gvr_difficulty = 0x00;
+        SetDifficulty(0x00);
         inversed = true;
       }
       else if (inversed && (animation_ptr->animations->current_animation != 0x14 || gvr_fade_var != 0))
       {
-        gvr_difficulty = 0x01;
+        SetDifficulty(0x01);
         inversed = false;
       }
     }
@@ -1398,6 +1406,11 @@ bool PortalBarrier(u32 gate_ptr, u8 gate) //false = open
   return OpenDoor(gate);
 }
 
+void NewGame(u32 ptr, u32 size){
+  CleanSave();
+  return gvr_fn_new_save(ptr, size);
+}
+
 
 u32 inject_hooks() {
   AP_MEMORY_PTR = &ap_memory;
@@ -1420,9 +1433,11 @@ u32 inject_hooks() {
   util_inject(UTIL_INJECT_FUNCTION, 0x801ADAC0, (u32)can_change_ball, 0);
   util_inject(UTIL_INJECT_FUNCTION, 0x8018DA7C, (u32)force_change_ball, 0);
 
-
   //Start with AP Ball
   util_inject(UTIL_INJECT_FUNCTION, 0x8016A9D8, (u32)start_with_APball, 1);
+
+  //disable in-game goals
+  util_inject(UTIL_INJECT_RAW, 0x801281C4, (u32)0, 0);
 
   /** hijack objects block **/
   //Garibs, Life and Switches
@@ -1546,5 +1561,12 @@ u32 inject_hooks() {
   {
     util_inject(UTIL_INJECT_FUNCTION, 0x801202D0, (u32)PortalBarrierDisplaced, 1);
   }
+
+  //File Select Hooks
+  util_inject(UTIL_INJECT_RAW, 0x80110E64, (u32)0x2A020002, 0); //Remove text from file 3, 4, 5 and 6
+  util_inject(UTIL_INJECT_RAW, 0x80110C50, (u32)0x28420001, 0); //Remove text from file 3, 4, 5 and 6
+  util_inject(UTIL_INJECT_FUNCTION, 0x80119830, (u32)NewGame, 0); //New game on Normal
+  util_inject(UTIL_INJECT_FUNCTION, 0x801197D4, (u32)NewGame, 0); //New game on Easy
+
   return 0;
 }
