@@ -1797,7 +1797,7 @@ void CheckReceivedAPItems()
                 ap_memory.pc.items[AP_SPACE_L3_CHECKPOINT3] = 1;
                 ap_memory.pc.items[AP_SPACE_L3_CHECKPOINT4] = 1;
                 ap_memory.pc.items[AP_OPEN_HUBS] = 1;
-                ap_memory.pc.items[AP_OPEN_WORLDS] = 1;
+                //ap_memory.pc.items[AP_OPEN_WORLDS] = 1;
             }
             break;
         default:
@@ -4006,7 +4006,7 @@ void UnlockStarWorld()
                                     gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_3 = 1;
                                     break;
                                 case 4:
                                     gvr_save.savefile[GetCurrentSave()].gates.atl_boss_defeated = 1;
@@ -4150,7 +4150,7 @@ void UnlockStarWorld()
                                     gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
                                     break;
                                 case 3:
-                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_2 = 1;
+                                    gvr_save.savefile[GetCurrentSave()].star_worlds.atl_3 = 1;
                                     break;
                                 case 4:
                                     gvr_save.savefile[GetCurrentSave()].gates.atl_boss_defeated = 1;
