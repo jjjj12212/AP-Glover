@@ -862,11 +862,11 @@ void MonitorEventsCarnival3()
                 u32 gate_ptr_offset = ap_memory.pc.worlds[AP_CARNIVAL_L3].switch_checks[0].ptr + 0x038;
                 u32 gate_ptr = (*(u32*)gate_ptr_offset);
                 u32 door_open_offset = gate_ptr + 0x0050;
-                if(!carn3_door && ap_memory.pc.items[AP_CARNIVAL_L3_HANDS])
+                if(!carn3_hands && ap_memory.pc.items[AP_CARNIVAL_L3_HANDS])
                 {
                     (*(u16*)door_open_offset) = 0x0001;
                     (*(u32*)position_addr) = 0xC45A2000;
-                    carn3_door = true;
+                    carn3_hands = true;
                 }
                 if(!ap_memory.pc.worlds[AP_CARNIVAL_L3].switch_checks[0].collected 
                     && (*(u16*)door_open_offset) == 0xFF9B) // Switch not yet collected
