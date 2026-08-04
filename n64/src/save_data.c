@@ -148,6 +148,23 @@ u8 GetSaveData(int item)
     }
 }
 
+void SaveDataBonusGoal(int world)
+{
+    u16 current_savefile = GetCurrentSave();
+    if(world == 1)
+        gvr_save.ap_save_data.bonus_goal[current_savefile].atl_bonus_goal = 1;
+    else if(world == 2)
+        gvr_save.ap_save_data.bonus_goal[current_savefile].carn_bonus_goal = 1;
+    else if(world == 3)
+        gvr_save.ap_save_data.bonus_goal[current_savefile].pir_bonus_goal = 1;
+    else if(world == 4)
+        gvr_save.ap_save_data.bonus_goal[current_savefile].pre_bonus_goal = 1;
+    else if(world == 5)
+        gvr_save.ap_save_data.bonus_goal[current_savefile].fort_bonus_goal = 1;
+    else if(world == 6)
+        gvr_save.ap_save_data.bonus_goal[current_savefile].spc_bonus_goal = 1;
+}
+
 void CleanSave()
 {
     u16 current_savefile = GetCurrentSave();
@@ -200,7 +217,13 @@ void CleanSave()
     gvr_save.ap_save_data.boomerang_transform[current_savefile] = 0;
     gvr_save.ap_save_data.beachball_transform[current_savefile] = 0;
     gvr_save.ap_save_data.helicopter_transform[current_savefile] = 0;
-    gvr_save.ap_save_data.death_transform[current_savefile] =0;
+    gvr_save.ap_save_data.death_transform[current_savefile] = 0;
+    gvr_save.ap_save_data.bonus_goal[current_savefile].atl_bonus_goal = 0;
+    gvr_save.ap_save_data.bonus_goal[current_savefile].carn_bonus_goal = 0;
+    gvr_save.ap_save_data.bonus_goal[current_savefile].pir_bonus_goal = 0;
+    gvr_save.ap_save_data.bonus_goal[current_savefile].pre_bonus_goal = 0;
+    gvr_save.ap_save_data.bonus_goal[current_savefile].fort_bonus_goal = 0;
+    gvr_save.ap_save_data.bonus_goal[current_savefile].spc_bonus_goal = 0;
 }
 
 u16 GetCurrentSave()

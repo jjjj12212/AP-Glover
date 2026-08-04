@@ -13,6 +13,8 @@ int main() {
   printf("    pc = 0x%X,\n",                                  calc(mem, mem.pc));
 
   printf("    ap_items = 0x%X,\n",                            calc(mem, mem.pc.items));
+  printf("    tready = 0x%X,\n",                            calc(mem, mem.pc.text_ready));
+
   printf("    ap_world = 0x%X,\n",                          calc(mem, mem.pc.worlds[0]));
 
   printf("      hub_entrance = 0x%X,\n",                      calc(mem.pc.worlds, mem.pc.worlds->hub_entrance));
@@ -101,7 +103,8 @@ int main() {
   printf("      inverse = 0x%X,\n",                           calc(mem.pc.settings, mem.pc.settings.inverse));
   printf("      random_garib_sounds = 0x%X,\n",               calc(mem.pc.settings, mem.pc.settings.random_sounds));
   printf("      portalsanity = 0x%X,\n",                      calc(mem.pc.settings, mem.pc.settings.portals));
-  printf("      trap_timer = 0x%X,\n",                      calc(mem.pc.settings, mem.pc.settings.trap_timer));
+  printf("      trap_timer = 0x%X,\n",                        calc(mem.pc.settings, mem.pc.settings.trap_timer));
+  printf("      boss_world_bonus = 0x%X,\n",                   calc(mem.pc.settings, mem.pc.settings.boss_world_bonus));
 
 
   printf("    hub_map = 0x%X,\n",                             calc(mem, mem.pc.hub_map));

@@ -122,6 +122,15 @@
     } ap_goals_t;
 
     typedef struct {
+        u8 spc_bonus_goal: 1;
+        u8 fort_bonus_goal: 1;
+        u8 pre_bonus_goal: 1;
+        u8 pir_bonus_goal: 1;
+        u8 carn_bonus_goal: 1;
+        u8 atl_bonus_goal:1;
+    } ap_bonus_goal_t;
+
+    typedef struct {
 
         u32 ap_name3;
 
@@ -160,7 +169,7 @@
         u8 beachball_transform[2];
         u8 helicopter_transform[2];
         u8 death_transform[2];
-        u8 empty[2];
+        ap_bonus_goal_t bonus_goal[2];
         u32 empty1[3];
 
         u32 ap_name6;

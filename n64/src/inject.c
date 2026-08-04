@@ -71,13 +71,12 @@ void pre_loop()
     csrand(12212);
     ap_memory.pc.version_major = 1;
     ap_memory.pc.version_minor = 1;
-    ap_memory.pc.version_patch = 0;
+    ap_memory.pc.version_patch = 1;
     InitAPWorlds();
     ap_memory.pc.id_gen = 1;
     gvr_double_jump_clear1 = 0;
     gvr_double_jump_clear2 = 0;
     InitLocationIds();
-    ap_memory.pc.text_ready = 1;
     //ap_memory.pc.settings.portals = 1;
     //ap_memory.pc.settings.garib_logic = 1;
     //ap_memory.pc.settings.random_sounds= 1;

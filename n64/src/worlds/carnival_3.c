@@ -872,7 +872,7 @@ void MonitorEventsCarnival3()
                     && (*(u16*)door_open_offset) == 0xFF9B) // Switch not yet collected
                 {
                     (*(u32*)position_addr) = 0xC4596000;
-                    (*(u16*)door_open_offset) == 0xFFFD;
+                    (*(u16*)door_open_offset) = 0xFFFD;
                 }
             }
             if(ap_memory.pc.worlds[AP_CARNIVAL_L3].switch_checks[1].ptr != 0) // Gate

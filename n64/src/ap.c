@@ -2523,9 +2523,18 @@ void CheckSensitiveReceivedAPItems()
 
                         gvr_save.savefile[GetCurrentSave()].gates.fort_door_2 = 1;
                         gvr_save.savefile[GetCurrentSave()].gates.fort_door_3 = 1;
-
+                        
                         gvr_save.savefile[GetCurrentSave()].gates.spc_door_2 = 1;
                         gvr_save.savefile[GetCurrentSave()].gates.spc_door_3 = 1;
+                        
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            gvr_save.savefile[GetCurrentSave()].gates.atl_door_bonus = 1;
+                            gvr_save.savefile[GetCurrentSave()].gates.carn_door_bonus = 1;
+                            gvr_save.savefile[GetCurrentSave()].gates.pir_door_bonus = 1;
+                            gvr_save.savefile[GetCurrentSave()].gates.pre_door_bonus = 1;
+                            gvr_save.savefile[GetCurrentSave()].gates.fort_door_bonus = 1;
+                            gvr_save.savefile[GetCurrentSave()].gates.spc_door_bonus = 1;
+                        }
                     }
                     break;
                 case AP_ATLANTIS_DOOR1_STAR:
@@ -3331,10 +3340,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
-                            && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                                && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].atl_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                                && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3355,10 +3372,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
-                            && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                                && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].atl_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                                && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3379,10 +3404,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
-                            && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                                && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].atl_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                                && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3415,8 +3448,19 @@ void Goal()
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
+                SaveDataBonusGoal(1);
                 if(ap_memory.pc.settings.portals == 0)
                 {
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_2
+                                && gvr_save.ap_save_data.goals[GetCurrentSave()].atl_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].atl_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.atl_door_boss = 1;
+                            }
+                        }
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
@@ -3438,10 +3482,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].carn_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3462,10 +3514,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].carn_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3486,10 +3546,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].carn_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3522,8 +3590,19 @@ void Goal()
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
+                SaveDataBonusGoal(2);
                 if(ap_memory.pc.settings.portals == 0)
                 {
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].carn_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].carn_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.carn_door_boss = 1;
+                            }
+                        }
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
@@ -3545,10 +3624,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].pir_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3569,10 +3656,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].pir_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3593,10 +3688,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].pir_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3629,8 +3732,19 @@ void Goal()
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
+                SaveDataBonusGoal(3);
                 if(ap_memory.pc.settings.portals == 0)
                 {
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pir_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].pir_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pir_door_boss = 1;
+                            }
+                        }
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
@@ -3652,10 +3766,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].pre_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3676,10 +3798,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].pre_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3700,10 +3830,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].pre_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3736,8 +3874,19 @@ void Goal()
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
+                SaveDataBonusGoal(4);
                 if(ap_memory.pc.settings.portals == 0)
                 {
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].pre_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].pre_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.pre_door_boss = 1;
+                            }
+                        }
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
@@ -3758,10 +3907,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].fort_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3782,10 +3939,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].fort_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3806,10 +3971,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].fort_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3842,8 +4015,19 @@ void Goal()
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
+                SaveDataBonusGoal(5);
                 if(ap_memory.pc.settings.portals == 0)
                 {
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].fort_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].fort_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.fort_door_boss = 1;
+                            }
+                        }
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {
@@ -3865,10 +4049,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].spc_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3889,10 +4081,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].spc_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3913,10 +4113,18 @@ void Goal()
                 {
                     if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
                     {
-                        if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].spc_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            }
+                        } else {
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
                             && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3)
-                        {
-                            gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            }
                         }
                     }
                     else
@@ -3949,8 +4157,19 @@ void Goal()
                 break;
             case 5:
                 ap_memory.pc.worlds[level].goal = 1;
+                SaveDataBonusGoal(6);
                 if(ap_memory.pc.settings.portals == 0)
                 {
+                    if(ap_memory.pc.items[AP_OPEN_WORLDS_X_BOSSES])
+                    {
+                        if(ap_memory.pc.settings.boss_world_bonus){
+                            if(gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_1 && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_2
+                            && gvr_save.ap_save_data.goals[GetCurrentSave()].spc_door_goal_3 && gvr_save.ap_save_data.bonus_goal[GetCurrentSave()].spc_bonus_goal)
+                            {
+                                gvr_save.savefile[GetCurrentSave()].gates.spc_door_boss = 1;
+                            }
+                        }
+                    }
                     if(level == AP_ATLANTIS_BOSS || level == AP_CARNIVAL_BOSS || level == AP_PIRATES_BOSS || level == AP_PREHISTORIC_BOSS
                         || level == AP_FORTRESS_BOSS || level == AP_SPACE_BOSS)
                     {

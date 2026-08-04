@@ -81,6 +81,7 @@
             u8 random_sounds;
             u8 portals;
             u16 trap_timer;
+            u8 boss_world_bonus;
         } settings;
         u8 items[AP_MAX_ITEM];
         struct {
